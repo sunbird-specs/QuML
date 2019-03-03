@@ -22,3 +22,13 @@ Finally, a specification should ensure longevity, i.e., questions and tests desc
 
 To mitigate the potential negative impact of such changes, rigorous revision management is essential, starting with the distinction between major and minor revisions and corresponding numbering schemes. Incompatible changes must then only be introduced in major revisions, after having been announced before. Inside a major revision, say, 1.x, all minor revisions (e.g., 1.1, 1.2, etc.) are all compatible with each other. Revision 2.0 may introduce incompatible changes, but not 2.1. This ensures that implementers and users can easily and reliably decide whether a specific question or test can be processed or not.
 
+## Structure of this specification
+The specification is spread over a number of documents:
+
+- Common Elements: The reference guide to the data model of common elements used in this specification.
+- Question Information Model: The reference guide to the data model for questions. The document provides detailed information about the model and specifies the requirements of delivery engines and authoring systems.
+- Question Set Information Model: The reference guide to the data model for question sets, which are used to represent tests.
+- Library Methods: The reference guide to methods to be implemented by QML implementations.
+- Samples: This document has sample questions and question sets represented using QML.
+
+
