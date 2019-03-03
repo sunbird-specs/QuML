@@ -25,10 +25,10 @@ To mitigate the potential negative impact of such changes, rigorous revision man
 ## Structure of this specification
 The specification is spread over a number of documents:
 
-- Common Elements: The reference guide to the data model of common elements used in this specification.
-- Question Information Model: The reference guide to the data model for questions. The document provides detailed information about the model and specifies the requirements of delivery engines and authoring systems.
-- Question Set Information Model: The reference guide to the data model for question sets, which are used to represent tests.
-- Library Methods: The reference guide to methods to be implemented by QML implementations.
-- Samples: This document has sample questions and question sets represented using QML.
+- [**Common Elements**](https://github.com/sunbird-specs/qml/blob/master/v1/common.md): The reference guide to the data model of common elements used in this specification.
+- [**Question Information Model**](https://github.com/sunbird-specs/qml/blob/master/v1/question.md): The reference guide to the data model for questions. The document provides detailed information about the model and specifies the requirements of delivery engines and authoring systems.
+- [**Question Set Information Model**](https://github.com/sunbird-specs/qml/blob/master/v1/questionSet.md): The reference guide to the data model for question sets, which are used to represent tests.
+- [**Library Methods**](https://github.com/sunbird-specs/qml/blob/master/v1/methods.md): The reference guide to methods to be implemented by QML implementations.
+- [**Samples**](https://github.com/sunbird-specs/qml/tree/master/v1/samples): This document has sample questions and question sets represented using QML.
 
 
