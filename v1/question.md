@@ -49,7 +49,7 @@ QML specification makes use of web standards like HTML, CSS, JSON, and Javascrip
 Question body contains the text, graphics, media objects and interactions that describe the question’s content and information about how it is structured. The body is presented by combining it with stylesheet and/or internationalization information, either explicitly or implicitly using the default style rules of the QML player.
 
 The structural elements of the item body are taken from HTML with the following restrictions:
-- It should contian only **structural and input HTML elements**. Structural elements include \<div>, \<span>, \<ul> and \<li>. Input html elements are text input, text area, select, options, checkbox, radio buttons, file upload and canvas elements.
+- It should contian only **structural, media and input HTML elements**. Structural elements include \<div>, \<span>, \<ul> and \<li>. Media html elements are img, audio and video elements. Input html elements are text input, text area, select, options, checkbox, radio buttons, file upload and canvas elements.
 - It should not contain a **\<form> element**
 - It should not have any **javascript code**, i.e. \<script> elements or onXYZ (onClick, etc) for HTML elements should not be used
 - It should not have any **javascript import statements**
@@ -225,6 +225,27 @@ There are four permitted values:
 4. ‘unknown’ - no assertion on the state of completion can be made.
 
 #### CSS classes
+QML recommends the use of Cascading Style Sheets (CSS) for controlling the content formatting. QML has a defined set of standard classes for various different elements and interactions. A question can use those classes for formatting and QML players should provide implementation for these classes.
+
+- *1-col-layout*: style to create a one column layout
+- *2-col-layout*: style to create a two column layout
+- *3-col-layout*: style to create a three column layout
+- *4-col-layout*: style to create a four column layout
+- *6-col-layout*: style to create a six column layout
+- *8-col-layout*: style to create a eight column layout
+- *row*: style to add a row in the question
+- *title*: for formatting title texts of the quesiton
+- *sub-title*: for formatting sub-headings in the question
+- *paragraph*: for formatting paragraph texts
+- *small-image*: style to display small images
+- *medium-image*: style to display medium size images
+- *large-image*: style to display large images
+- *horizontal-options*: style to layout options horizontally (can be used for choice, match and order interactions)
+- *vertical-options*: style to layout options vertically (can be used for choice, match and order interactions)
+- *file-upload*: styling for file upload elements (can be used for upload interaction)
+- *canvas*: styling for canvas elements (can be used for map interaction)
+
+Alternatively when there is a need for formatting that is not provided by the defined classes, a question can also have custom css. The support of the CSS elements used for formatting is totally dependent on the browser used to render the question. Hence it is advised to use only CSS elements that are supported by all the commonly used browsers and browser versions.
 
 #### Instructions
 Some questions will have instructions of how to understand, attempt or how the question will be evaluated. Such instructions are defined in HTML format and stored in the instructions part of the question data. Instructions can contain i18n variables to support internationalization.
