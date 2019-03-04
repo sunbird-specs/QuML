@@ -479,8 +479,206 @@ Following is the sample usage of response processing templates. The sample javas
 > QML implementations that do not support custom response processing but do support response processing mechanisms that go beyond the standard templates described above can define templates of their own. Authors wishing to write questions for those implementations can then refer to these custom templates. Publishing these custom templates will then ensure that these questions can be used with QML players that do support generalized response processing.
 
 #### Template Declaration
+Template declarations declare variables that are to be used specifically for the purposes of cloning items. They can have their value set only during templateProcessing. They are referred to within the question body in order to individualize the clone and possibly also within the responseProcessing rules if the cloning process affects the way the question is scored.
+
+Template declaration is a JSON object in key-value format. The keys in the JSON are the template variables used in the question and values are of type TemplateVariableDef. 
+
+TemplateDeclaration:
+
+```
+{
+	“templateDeclaration”: {
+		“<template_variable_1>”: TemplateVariableDef Object,
+		“<template_variable_2>”: TemplateVariableDef Object,
+		… 
+	}
+}
+```
+
+*TemplateVariableDef:*
+
+Each template variable should have exactly one template variable definition in the template declaration.
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| cardinality | dataType: string, required: true, range: “single”, “multiple”, “ordered” | Used to specify whether the template variable will have a single value, multiple values or an ordered list of values. |
+| type | dataType: string, required: true, range: “string”, “integer”, “float”, “boolean”, “map”, “uri”, “points”, “coordinate” |  |
+| defaultValue | dataType: any, required: false |  |
+
+A question can have template variable that are not used in the question “body”. There will be cases when some template variables are needed for template and/or response processing but not visible for the candidate. Below is a sample template declaration. In addition to the template variables used in the body, there is an additional template variable “template_var_temp_number” defined. This additional template variable can be used in both template and response processing.
+
+```
+{
+    “templateDeclaration”: {
+            “template_var_fruit_number_1”: {
+                    “cardinality”: “single”, “type”: “integer”, “defaultValue”: 5
+            },
+            “template_var_fruit_number_2”: {
+                    “cardinality”: “single”, “type”: “integer”, “defaultValue”: 3
+            },
+            “template_var_fruit_name”: {
+                    “cardinality”: “single”, “type”: “string”, “defaultValue”: “apples”
+            },
+            “template_var_temp_number”: {
+                    “cardinality”: “single”, “type”: “integer”, “defaultValue”: 2
+            }
+    }
+}
+```
 
 #### Template Processing
+Template processing consists of one or more templateRules that are followed by the QML players in order to assign values to the template variables. Template processing is identical in form to responseProcessing except that the purpose is to assign values to template variables, not outcome variables, at the start of a question session.
+
+Template processing is a JSON object in key-value format. The keys in the JSON are the template variables used in the question and values are of type TemplateProcessingDef. 
+
+TemplateProcessing:
+
+```
+{
+	“templateProcessing”: {
+		“<template_variable_1>”: List of TemplateProcessingDef Objects (one per locale),
+		“<template_variable_2>”: List of TemplateProcessingDef Objects,
+		… 
+	}
+}
+```
+
+*TemplateProcessingDef:*
+
+Each template variable should have the template processing rule defined using TemplateProcessingDef object.
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| random | dataType: RandomVariableDef, required: false | Used to generate a random value for the template variable |
+| regex | dataType: string, required: false | Used to provide a regular expression for generating value for the template variable |
+| eval | dataType: string, required: false | Used to provide custom logic (in javascript) for generating value for the template variable |
+| locale | dataType: string, required: false, defaultValue: en | Internationalization is supported in template processing. Template processing specific to locale can be defined by setting the locale value. |
+
+> For each template variable, at least one and only one of “random”, “regex” and “eval” should be defined as the processing rule. 
+
+*RandomVariableDef:*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| list | dataType: list of any, required: false | Used to pick a value randomly from the provided list |
+| number | dataType: RandomNumberDef, required: false | Used to generate a random number (integer or float) |
+
+*RandomNumberDef:*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| type | dataType: string, required: true, range: integer, float | |
+| min | dataType: integer/float, required: true | |
+| max | dataType: integer/float, required: true | |
+| step | dataType: integer/float, required: false | |
+
+Below is the sample template processing configuration for the template variables referred to in the previous section. 
+
+```
+{
+    “templateProcessing”: {
+            “template_var_fruit_number_1”: [{
+<!-- a random integer between 3 and 9 is set as the value for this variable -->
+                    “random”: {
+                            “type”: “integer”, “min”: 3, “min”: 9
+                    }
+            }],
+            “template_var_temp_number”: [{
+<!-- a random integer between 3 and 6 is set as the value for this variable -->
+                    “random”: {
+                            “type”: “integer”, “min”: 3, “min”: 6
+                    }
+            }],
+            “template_var_fruit_number_2”: [{
+<!-- this template variable is dependent on the value of above two variables. Hence the processing rule for those two variables should be defined before this variable. -->
+                    “eval”: “
+                            if (getTemplateVariable(‘template_var_temp_number’) > getTemplateVariable(template_var_fruit_number_1)) {
+                                    return getTemplateVariable(template_var_fruit_number_1) - 3;
+                            } else {
+                                    return getTemplateVariable(template_var_fruit_number_1) - getTemplateVariable(‘template_var_temp_number’);
+                            }
+                    ”
+            }],
+            “template_var_fruit_name”: [{
+<!-- a random value from the below list is set as the value for this variable -->
+                    “random”: {
+                            “list”: [“apples”, “mangoes”, “bananas”, “oranges”, “pineapples”]
+                    },
+                    “locale”: “en”
+            }, {
+                    “random”: {
+                            “list”: [“सेब”, “आम”, “केले”, “संतरे”, “अनानास”]
+                    },
+                    “locale”: “hi”
+            }]
+    }
+}
+```
+
+##### Using Template Variables in Response Processing
+
+Template variables are also used in response processing in cases when these variables affect the outcome of the question. When the response processing has custom logic , the template variables can be accessed using the library method *getTemplateVariable*. Alternatively, the pre-defined response processing template **“MATCH_TEMPLATE”** can also be used to process the response using template variables.
+
+**MATCH_TEMPLATE**
+
+This response processing template matches the value of response variables with specified template variables and sets the outcome variable SCORE. 
+
+The map response processing template takes a match template config as input. This config is to set SCORE outcome variable based on the value of a template variable. Optionally, a mapping config (similar to the one provided for MAP_RESPONSE template) can also be provided to set other outcome variables.
+
+*MatchTemplateConfig:*
+
+Template variable config should be provided in JSON format. It comprises of the list of outcome variables and their values for various possible scores.
+
+```
+{
+<!-- matchTemplateConfig is a list of configurations, each for different SCORE outcome -->
+    “matchTemplateConfig”: [
+           {
+<!-- each config has a mapping section to define the mapping between each response and one or more template variables-->
+                 “mapping”: {
+<!-- for each response variable, a list of conditions can be configured -->
+                        <response_variable_1>: [
+                            {
+<!-- operators: le (less than or equal to), lt (less than), eq (equals to), ge (greater than or equals to), gt (greater than) and in (in a list of values) -->
+                                “operator”: <operator_1>,
+<!-- one or more template variables can be specified for each operator. If more than one template variable is provided, an OR condition will be applied -->
+                                “templateVariables”: [<template_variable_1>, <template_variable_2>]
+                            },
+<!-- AND operation is applied between multiple conditions of a response variable -->
+                            {   … }
+                        ],
+<!-- AND operation is applied between multiple response variable conditions-->
+                        <response_variable_2>: [{ … }]
+                 }
+<!-- a SCORE value should be configured to be set when the specified mapping resolves to be true -->
+                 “SCORE”: 1.0
+           }
+    ]
+<!-- if none of the mappings are resolved to true, the SCORE will be set to 0 by the MATCH_TEMPLATE -->
+}
+```
+
+Following is the sample usage of MATCH_TEMPLATE response processing template:
+
+```
+{
+    “responseProcessing”: {
+           “template”: “MATCH_TEMPLATE”,
+           “matchTemplateConfig”: [
+                   {
+                           “mapping”: {
+                                   “response_01”: [{
+                                           “eq”: “template_var_temp_number”
+                                   }]
+                           },
+                           “SCORE”: 1.0
+                   }           
+           ]
+    }
+}
+```
+
+In the above sample, the SCORE is set to 1.0 when the value of response variable “RESPONSE” is equal to the value of the template variable “template_var_temp_number”.
 
 ### Question Metadata
 
