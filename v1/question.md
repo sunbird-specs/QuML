@@ -6,6 +6,12 @@ This document has the following sections:
 2. Question Metadata - QML specific metadata
 3. Usage data and Results Reporting - statistical data about the usage and reporting of the results assigned by outcomes and response processing of the question
 
+### Table of contents
+1. [Question Data Model](#Question Data Model)
+    1. [Body](#Body)
+2. [Question Metadata](#paragraph2)
+3. [Usage Data and Results Reporting](#paragraph2)
+
 ### Question Data Model
 
 A QML Question comprises of the information model and associated binding that can be used to store, represent and deliver questions. A question can be defined as a set of interactions (possibly empty) collected together with any supporting material and an optional set of rules for converting the student’s response(s) into outcomes. Question contains the definition for the interactions, variables to store responses, logic to process the responses, outcome data and other components that are needed for question delivery.
@@ -28,7 +34,7 @@ In addition to the standard HTML elements and attributes, the specification allo
 - Usage for “data-” attributes to specify the interactions on HTML elements, bind response variables to the interactions, use asset, template and i18n variables.
 - Usage of standard style classes defined by the specificaiton. QML players should provide implementation for the defined classes.
 
-**Body:**
+Body:
 ```
 {
 	“itemBody”: “<HTML>...</HTML>”
