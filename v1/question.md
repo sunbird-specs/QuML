@@ -318,11 +318,41 @@ Each outcome variable should have exactly one outcome variable definition in the
 | defaultValue | dataType: any, required: false |  |
 | range | dataType: List of any, required: false |  |
 
-
-
 #### Feedback
+Feedback is a JSON object in key-value format. The keys in the JSON are the identifiers of different feedbacks for the question and values are HTML snippet to be shown to the candidate. After the response processing, the QML player renders the feedback HTML mapped to the value that is set to the FEEDBACK outcome variable. Feedback can contain i18n variables to support internationalization.
+
+Feedback:
+
+```
+{
+	“feedback”: {
+		“<feedback_1>”: “<HTML>...</HTML>”,
+		“<feedback_2>”: “<HTML>...</HTML>”,
+		… 
+	}
+}
+```
 
 #### Hints
+Hints are shown to the candidates after response processing or when the student requests for hints.
+- HINT outcome variable value is used to render the hint after response processing.
+- Alternatively, QML players can provide an option for students to request for hints. Upon request, the QML player renders all the configured hints in a sequence (as defined in the hints configuration).
+
+In either case, hints are shown only if they are allowed in the context where the question is being used. Hints is a JSON object in key-value format. The keys in the JSON are the identifiers of different hints for the question and values are HTML snippet for hints.
+
+Hints is a JSON object in key-value format. The keys in the JSON are the identifiers of different hints for the question and values are HTML snippet for hints. Hints can contain i18n variables to support internationalization.
+
+Hints:
+
+```
+{
+	“hints”: {
+		“<hint_1>”: “<HTML>...</HTML>”,
+		“<hint_2>”: “<HTML>...</HTML>”
+		… 
+	}
+}
+```
 
 #### Answers
 
