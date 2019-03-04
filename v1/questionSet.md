@@ -174,6 +174,24 @@ Outcome processing schema for using outcome processing templates:
 | mappingConfig | dataType: string, required: false | configuration to set additional outcome variables (other than SCORE). Same as the mappingConfig defined in question responseProcessing specification |
 
 #### Questions
+If a question set contains questions, the association should be defined in the “questions” section. This section is mutually exclusive with “questionSets” section, i.e. a question set contain only either question sets or questions but not both.
+
+Questions:
+
+```
+{
+“questions”: [{QuestionDef Object}, {QuestionDef Object}, … ]
+}
+```
+
+*QuestionDef*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| shuffle | dataType: boolean, required: false, defaultValue: false | |
+| totalQuestions | dataType: integer, required: true | |
+| maxQuestions | dataType: integer, required: true | |
+| list | dataType: list of string, required: true | List of question identifiers that are added to the question set. |
 
 #### Question Sets
 
