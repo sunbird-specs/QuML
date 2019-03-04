@@ -160,14 +160,18 @@ Outcome processing takes place each time the student submits the responses for a
 
 Similar to response processing of questions, outcome processing rules of a question set can be defined using custom evaluation logic or use one of the existing outcome processing templates. Following are the outcome processing templates defined in QML:
 
-**SUM_OF_SCORES**
-This outcome processing template adds the value of SCORE outcome variables of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+1. **SUM_OF_SCORES**: This outcome processing template adds the value of SCORE outcome variables of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+2. **AVG_OF_SCORES**: This outcome processing template computes the average of SCORE outcome values of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+3. **WEIGHTED_AVG_OF_SCORES**: This template is similar to the AVG_OF_SCORES templates with an additional configuration to specify weightage for each question or question set. The weightage configuration can be provided using an additional parameter **weightageConfig** in outcome processing.
 
-**AVG_OF_SCORES**
-This outcome processing template computes the average of SCORE outcome values of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+Outcome processing schema for using outcome processing templates:
 
-**WEIGHTED_AVG_OF_SCORES**
-This template is similar to the AVG_OF_SCORES templates with an additional configuration to specify weightage for each question or question set. The weightage configuration can be provided using an additional parameter **weightageConfig** in outcome processing.
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| template | dataType: string, required: false, range: SUM_OF_SCORES, AVG_OF_SCORES, WEIGHTED_AVG_OF_SCORES | name of the outcome processing template to be used for the question. “template” is mandatory if outcome processing templates are used for the question |
+| ignoreNullValues | dataType: string, required: false, defaultValue: false | If set to true, the processing will ignore any SCORE outcomes that are null. This is relevant while using average based templates |
+| weightageConfig | dataType: map<string, float>, required: false | configuration to set weightages for questions or question sets when WEIGHTED_AVG_OF_SCORES template is used. If not provided, same weightage is given to all |
+| mappingConfig | dataType: string, required: false | configuration to set additional outcome variables (other than SCORE). Same as the mappingConfig defined in question responseProcessing specification |
 
 #### Questions
 
