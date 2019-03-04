@@ -172,6 +172,27 @@ Shyam now has <input type="text" data-text-interaction data-response-variable="r
 
 The above question is for subtraction, where the learner is asked to identify the number of apples Shyam has after Ram borrowed 3 of the 5 apples which Shyam had. Instead of showing the same numbers and fruit name always, the numbers and name of the fruit is templatized in the item body using template variables.
 
+#### Outcome Variables
+Outcome variables are declared by outcome declarations. Their value is set either from a default given in the declaration itself or during “response processing”. These variables are used for returning the score or for controlling the feedback to the student.
+
+There are six reserved outcome variables:
+
+- Questions that declare a numeric outcome variable representing the student’s overall performance on the question should use the outcome name **‘SCORE’** for the variable. SCORE needs to be a float.
+- Questions that provide a feedback to student after the attempt should use the outcome variable **‘FEEDBACK’** to show the appropriate feedback modal. FEEDBACK needs to be a string.
+- Questions that have in-built hints to help students in attempting the question should use the outcome variable **‘HINT’**. The value of this variable should be used by the QML players to render the corresponding hint modal. HINT needs to be a string.
+- Questions that declare a maximum score (in multiple response choice questions, for example) should do so by declaring the **‘MAXSCORE’** variable. MAXSCORE needs to be a float.
+- Questions that declare a minimum score (minimum score to mark the student as passed) should do so by declaring the **‘MINSCORE’** variable. MINSCORE needs to be a float.
+- Questions or tests that want to make the fact that the student scored above a predefined threshold available as a variable should use the **‘PASSED’** variable. PASSED needs to be a boolean. This variable is automatically set after response processing using the SCORE and MINSCORE outcome variables.
+
+##### Built-in Outcome Variables
+There is one built-in outcome variable, **‘completionStatus’**, that is declared implicitly and must not appear in outcome variables declaration. QML players must maintain the value of the built-in outcome variable completionStatus. It starts with the reserved value “not_attempted”. At the start of the first attempt, it changes to the reserved value “unknown”. It remains with this value for the duration of the question session unless set to a different value by a setOutcomeValue in responseProcessing. This variable changes to the reserved value “completed” by default if it is not updated during response processing. 
+
+There are four permitted values:
+1. ‘completed’ - the student has experienced enough of the question to consider it completed;
+2. ‘incomplete’ - the student has not experienced enough of the question to consider it completed;
+3. ‘not_attempted’ - the student is considered to have not used the question in any significant way;
+4. ‘unknown’ - no assertion on the state of completion can be made.
+
 #### Style classes
 
 #### Instructions
