@@ -234,8 +234,8 @@ Asset Declaration:
 ```
 {
 	“assetDeclaration”: {
-		“<asset_01>”: <asset object>,
-		“<asset_02>”: <asset object>,
+		“<asset_01>”: Asset object,
+		“<asset_02>”: Asset object,
 		… 
 	}
 }
@@ -355,6 +355,27 @@ Hints:
 ```
 
 #### Answers
+Providing exemplar answers for questions aid candidates in-depth learning and enhance candidate’s understanding of the concepts. These answers are mainly helpful for candidates in preparing for exams. Multiple answers can be configured for a question and each answer can have one or more parts, each part could be either text, rich text (HTML5), or a set of assets (images, audios, or videos).
+
+Answers:
+
+```
+{
+	“answers”: [
+	{
+		"parts": [{
+				"body": “<HTML>...</HTML>”,
+				"assets": [list of Asset objects],
+				"comment": "optional comment for the answer part"
+			},
+			{ ... }
+		]
+		“comment”: “optional comment for the answer”
+	},
+	{ ... }
+	]
+}
+```
 
 #### Response Processing
 
