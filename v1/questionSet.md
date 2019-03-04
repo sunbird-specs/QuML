@@ -30,6 +30,36 @@ i18n variables are used to enable internationalization, which can be used to loc
 #### i18n data
 Similar to questions, texts in a question set (instructions, feedback, hints) can also be rendered in multiple locales. The values for i18n variables in different locales should be defined as i18n data for the question set. The format of i18n data of question sets is same as that of questions.
 
+#### Feedback
+The feedback configuration for question sets is same as that of questions. Multiple feedbacks can be configured and each feedback should be defined in HTML format.
+
+Feedback:
+
+```
+{
+	“feedback”: {
+		“<feedback_1>”: “<HTML>...</HTML>”,
+		“<feedback_2>”: “<HTML>...</HTML>”,
+		… 
+	}
+}
+```
+
+#### Hints
+The hints configuration for question sets is same as that of questions. Multiple hints can be configured and each hint should be defined in HTML format.
+
+Hints:
+
+```
+{
+	“hints”: {
+		“<hint_1>”: “<HTML>...</HTML>”,
+		“<hint_2>”: “<HTML>...</HTML>”,
+		… 
+	}
+}	
+```
+
 #### Navigation mode
 The navigation mode determines the general paths that the student may take during the test session. It is an enumeration with two possible values: “linear” and “non-linear”.
 
@@ -40,6 +70,9 @@ Navigation Mode:
 	“navigationMode”: “linear | non-linear”
 }	
 ```
+
+- A question set in linear mode restricts the student to attempt each question in turn. Once the student moves on they are not permitted to return. 
+- A question set in nonlinear mode removes this restriction - the student is free to navigate to any question in the question set at any time.
 
 #### Time limits
 This configuration is used by QML players to impose time limits (both minimum and maximum) for attempting a question set. The limits can be specified for the complete set or for one question in the set.
@@ -53,7 +86,7 @@ Time Limits:
 			“min”: <milli_seconds>,
 			“max”: <milli_seconds>
 		},
-“question”: { // time limits for the questions in the question set
+		“question”: { // time limits for the questions in the question set
 			“min”: <milli_seconds>,
 			“max”: <milli_seconds>
 		}
@@ -87,6 +120,39 @@ OutcomeDeclaration:
 }
 ```
 
+#### Outcome Processing
+Similar to response processing of questions, outcome processing rules of a question set can be defined using custom evaluation logic or use one of the existing outcome processing templates.
+
+##### Custom Outcome Processing
+The custom outcome processing logic using javascript should be defined as part of the “eval” attribute of “outcomeProcessing” data.
+
+```
+{
+    “outcomeProcessing”: {
+           “eval”: “<javascript code to set the outcome variables. Library methods can be used to refer and set question and question set variables>“
+    }
+}
+```
+
+> “eval” data is mandatory if outcome processing templates are not used for the question set. If both template and evaluation logic are present, template is executed first and then the custom evaluation logic is executed.
+
+##### Outcome Processing Templates
+Outcome processing takes place each time the student submits the responses for a question. It happens after any (question level) response processing triggered by the submission. Because outcome processing occurs each time the student submits responses, the resulting values of the question set outcomes may be used to activate question set level feedback during the test or to control the behaviour of subsequent parts through the use of preConditions and branchRules. 
+
+Similar to response processing of questions, outcome processing rules of a question set can be defined using custom evaluation logic or use one of the existing outcome processing templates. Following are the outcome processing templates defined in QML:
+
+**SUM_OF_SCORES**
+This outcome processing template adds the value of SCORE outcome variables of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+
+**AVG_OF_SCORES**
+This outcome processing template computes the average of SCORE outcome values of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+
+**WEIGHTED_AVG_OF_SCORES**
+This template is similar to the AVG_OF_SCORES templates with an additional configuration to specify weightage for each question or question set. The weightage configuration can be provided using an additional parameter **weightageConfig** in outcome processing.
+
+#### Questions
+
+#### Question Sets
 
 ### Question Set Metadata
 
