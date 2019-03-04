@@ -207,8 +207,65 @@ i18n:
 ```
 
 #### Asset Declaration
+An **“assetDeclaration”** contains information about the assets used in the question. QML players should load the declared assets before rendering the question (before interacting state). Asset Declaration should have declaration for every asset variable used in the question. Asset declaration is defined in JSON format and stored in the assetDeclaration part of the question data.
+
+Asset Declaration:
+```
+{
+	“assetDeclaration”: {
+		“<asset_01>”: <asset object>,
+		“<asset_02>”: <asset object>,
+		… 
+	}
+}
+```
 
 #### Response Declaration
+A **“responseDeclaration”** contains information about the answer (the response) to a question: When is it correct, and (optionally) how is it scored? 
+
+Response Declaration should have declaration for every response variable in the question body. Response declaration is a JSON object in key-value format. The keys in the JSON are the response variables defined in the body and values are of type ResponseVariableDef.
+
+ResponseDeclaration:
+{
+	“responseDeclaration”: {
+		“<response_variable_1>”: ResponseVariableDef Object,
+		“<response_variable_2>”: ResponseVariableDef Object,
+		… 
+	}
+}
+
+*ResponseVariableDef:*
+Each response variable should have exactly one response variable definition in the response declaration.
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| cardinality | dataType: string, required: true, range: “single”, “multiple”, “ordered” | Used to specify whether the response variable will have a single value, multiple values or an ordered list of values. |
+| type | dataType: string, required: true, range: “string”, “integer”, “float”, “boolean”, “map”, “uri”, “points”, “coordinate” |  |
+| correctResponse | dataType: CorrectResponseDef, required: false |  |
+| mapping | dataType: MappingDef, required: false | Map different answers to scores so that an answer can have more nuances than plain right or wrong |
+| areaMapping | dataType: AreaMappingDef, required: false | Similar to mapping attribute, but for response variables associated to map interactions |
+
+*CorrectResponseDef:*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| value | dataType: any, required: true |  |
+
+
+*MappingDef:*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| key | dataType: any, required: true |  |
+| value | dataType: float, required: true |  |
+| caseSensitive | dataType: boolean, required: false, defaultValue: false |  |
+
+*AreaMappingDef:*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| key | dataType: points, required: true |  |
+| value | dataType: float, required: true |  |
 
 #### Outcome Declaration
 
