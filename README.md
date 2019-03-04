@@ -1,4 +1,4 @@
-# Question Markup Language (QML) Specification
+# Question Markup Language (QML) Specification - Draft
 
 Question Markup Language (QML in short) is a specification for storage, rendering and distribution of Questions and Tests. QML allows assessment materials to be authored and delivered on multiple systems interchangeably. It is designed to facilitate interoperability between systems.
 
