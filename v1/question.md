@@ -172,9 +172,39 @@ Shyam now has <input type="text" data-text-interaction data-response-variable="r
 
 The above question is for subtraction, where the learner is asked to identify the number of apples Shyam has after Ram borrowed 3 of the 5 apples which Shyam had. Instead of showing the same numbers and fruit name always, the numbers and name of the fruit is templatized in the item body using template variables.
 
+#### Style classes
+
 #### Instructions
+Some questions will have instructions of how to understand, attempt or how the question will be evaluated. Such instructions are defined in HTML format and stored in the instructions part of the question data. Instructions can contain i18n variables to support internationalization.
+
+Instructions:
+```
+{
+	“instructions”: “<HTML>... … … </HTML>”
+}
+```
 
 #### i18n Data
+Internationalization is supported by QML to render texts inside body (instructions, answers, feedback and hints) in different locales. QML players should render all i18n variables in the selected locale. If localised value for a variable is not present in one of the locales, QML players should use the default value (provided for the variable in the declaration).
+
+The i18n data should be stored in the question data in JSON format. The values for each of the i18n variables should be provided for each of the supported locales.
+
+i18n:
+```
+{
+	“i18n”: {
+		“<locale_1>”: {
+			“<i18_variable_1>”: “<localised_text>”,
+			… 
+		},
+		“<locale_2>”: {
+			“<i18_variable_1>”: “<localised_text>”,
+			… 
+		},
+		… 
+	}
+}
+```
 
 #### Asset Declaration
 
