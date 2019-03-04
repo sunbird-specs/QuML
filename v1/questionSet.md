@@ -180,7 +180,7 @@ Questions:
 
 ```
 {
-“questions”: [{QuestionDef Object}, {QuestionDef Object}, … ]
+“questions”: {QuestionDef Object}
 }
 ```
 
@@ -194,6 +194,34 @@ Questions:
 | list | dataType: list of string, required: true | List of question identifiers that are added to the question set. |
 
 #### Question Sets
+A question set can contain either other question sets or individual questions. If a question set contains other question sets, the association should be specified in the “questionSets” section. 
+
+QuestionSets:
+
+```
+{
+“questionSets”: [{QuestionSetDef Object}, {QuestionSetDef Object}, … ]
+}
+```
+
+*QuestionSetDef*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| questionSetId | dataType: string, required: true | |
+| shuffle | dataType: boolean, required: false, defaultValue: false | |
+| totalQuestions | dataType: integer, required: true | |
+| maxQuestions | dataType: integer, required: true | |
+| preConditions | dataType: list of PreConditionDef objects, required: false | Used to skip the question set depending on the outcome of question sets presented earlier.  |
+| branchRules | dataType: list of BranchRuleDef objects, required: false | Evaluated after question set is complete and jumps forward to the specified target. |
+
+*PreConditionDef*
+
+*OutcomeMatchDef*
+
+*BranchRuleDef*
+
+*TargetSetDef*
 
 ### Question Set Metadata
 
