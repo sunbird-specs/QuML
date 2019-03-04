@@ -7,10 +7,10 @@ This document has the following sections:
 3. Usage data and Results Reporting - statistical data about the usage and reporting of the results assigned by outcomes and response processing of the question
 
 ### Table of contents
-1. [Question Data Model](#Question Data Model)
+1. [Question Data Model](#Question-Data-Model)
     1. [Body](#Body)
-2. [Question Metadata](#paragraph2)
-3. [Usage Data and Results Reporting](#paragraph2)
+2. [Question Metadata](#question-metadata)
+3. [Usage Data and Results Reporting](#Usage-Data-and-Results-Reporting)
 
 ### Question Data Model
 
