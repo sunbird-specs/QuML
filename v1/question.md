@@ -9,7 +9,32 @@ This document has the following sections:
 ### Table of contents
 1. [Question Data Model](#Question-Data-Model)
     1. [Body](#Body)
+	2. [Interactions](#Interactions)
+	3. [Response Variables](#Response-Variables)
+	4. [Asset Variables](#Asset-Variables)
+	5. [i18n Variables](#i18n-Variables)
+	6. [Template Variables](#Template-Variables)
+	7. [Outcome Variables](#Outcome-Variables)
+	8. [CSS classes](#CSS-classes)
+	9. [Instructions](#Instructions)
+	10. [i18n Data](#i18n-Data)
+	11. [Asset Declaration](#Asset-Declaration)
+	12. [Response Declaration](#Response-Declaration)
+	13. [Outcome Declaration](#Outcome-Declaration)
+	14. [Feedback](#Feedback)
+	15. [Hints](#Hints)
+	16. [Answers](#Answers)
+	17. [Response Processing](#Response-Processing)
+		1. [Custom Response Processing](#Custom-Response-Processing)
+		2. [Response Processing Templates](#Response-Processing-Templates)
+	18. [Template Declaration](#Template-Declaration)
+	19. [Template Processing](#Template-Processing)
+		1. [Using Template Variables in Response Processing](#Using-Template-Variables-in-Response-Processing)
 2. [Question Metadata](#question-metadata)
+    1. [Learning Metadata](#Learning-Metadata)
+	2. [Technical Metadata](#Technical-Metadata)
+	3. [Curricular Metadata](#Curricular-Metadata)
+	4. [Usage Metadata](#Usage-Metadata)
 3. [Usage Data and Results Reporting](#Usage-Data-and-Results-Reporting)
 
 ### Question Data Model
@@ -199,7 +224,7 @@ There are four permitted values:
 3. ‘not_attempted’ - the student is considered to have not used the question in any significant way;
 4. ‘unknown’ - no assertion on the state of completion can be made.
 
-#### Style classes
+#### CSS classes
 
 #### Instructions
 Some questions will have instructions of how to understand, attempt or how the question will be evaluated. Such instructions are defined in HTML format and stored in the instructions part of the question data. Instructions can contain i18n variables to support internationalization.
