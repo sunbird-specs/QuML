@@ -226,6 +226,7 @@ A **“responseDeclaration”** contains information about the answer (the respo
 Response Declaration should have declaration for every response variable in the question body. Response declaration is a JSON object in key-value format. The keys in the JSON are the response variables defined in the body and values are of type ResponseVariableDef.
 
 ResponseDeclaration:
+```
 {
 	“responseDeclaration”: {
 		“<response_variable_1>”: ResponseVariableDef Object,
@@ -233,8 +234,10 @@ ResponseDeclaration:
 		… 
 	}
 }
+```
 
 *ResponseVariableDef:*
+
 Each response variable should have exactly one response variable definition in the response declaration.
 
 | Attribute | Schema | Description |
@@ -268,6 +271,33 @@ Each response variable should have exactly one response variable definition in t
 | value | dataType: float, required: true |  |
 
 #### Outcome Declaration
+An “outcomeDeclaration” contains information about the outcome variables of the question, i.e the values that are output of a question session (QML player should make the outcome variables available to the context in which the question is being used).
+
+Outcome declaration is a JSON object in key-value format. The keys in the JSON are the outcome variables and values are of type OutcomeVariableDef.
+
+OutcomeDeclaration:
+```
+{
+	“outcomeDeclaration”: {
+		“<outcome_variable_1>”: OutcomeVariableDef Object,
+		“<outcome_variable_2>”: OutcomeVariableDef Object,
+		… 
+	}
+}
+```
+
+*OutcomeVariableDef:*
+
+Each outcome variable should have exactly one outcome variable definition in the outcome declaration.
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| cardinality | dataType: string, required: true, range: “single”, “multiple”, “ordered” | Used to specify whether the outcome variable will have a single value, multiple values or an ordered list of values. |
+| type | dataType: string, required: true, range: “string”, “integer”, “float”, “boolean”, “map”, “uri”, “points”, “coordinate” |  |
+| defaultValue | dataType: any, required: false |  |
+| range | dataType: List of any, required: false |  |
+
+
 
 #### Feedback
 
