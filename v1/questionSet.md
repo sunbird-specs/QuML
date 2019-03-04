@@ -1,5 +1,24 @@
 ## Question Set Information Model
 
+### Table of contents
+1. [Question Set Data Model](#Question-Set-Data-Model)
+    1. [Instructions](#Instructions)
+	2. [i18n Variables](#i18n-Variables)
+	3. [i18n Data](#i18n-Data)
+	4. [Feedback](#Feedback)
+	5. [Hints](#Hints)
+	6. [Navigation Mode](#Navigation-Mode)
+	7. [Time Limits](#Time-Limits)
+	8. [Show Hints](#Show-Hints)
+	9. [Instructions](#Instructions)
+	10. [Outcome Declaration](#Outcome-Declaration)
+	11. [Outcome Processing](#Outcome-Processing)
+		1. [Custom Outcome Processing](#Custom-Outcome-Processing)
+		2. [Outcome Processing Templates](#Outcome-Processing-Templates)
+	12. [Questions](#Questions)
+	13. [Question Sets](#Question-Sets)
+2. [Question Set Metadata](#question-set-metadata)
+3. [Usage Data and Results Reporting](#Usage-Data-and-Results-Reporting)
 
 ### Question Set Data Model
 
