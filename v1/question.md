@@ -126,6 +126,23 @@ QML implementations can implement a set of custom interactions that go beyond th
 
 #### Response Variables
 
+Response variables are used to capture the response of candidate. These variables are generated as a result of an interaction of candidate with the question.
+
+Response variables can be used within the question body using the html data attribute: “data-response-variable”. This data attribute should be set on HTML elements that are used by candidates for interacting with the question. And when the candidate uses the HTML element for interaction, the corresponding response variable should be updated with the value of the HTML element. 
+
+```
+<input type="checkbox" name="element" data-multi-choice-interaction data-response-variable="response_01" value="Oxygen">
+```
+
+In the above sample, there is response variable named “response_01” defined on the HTML checkbox element. When a candidate selects the checkbox, the value of the checkbox element (Oxygen, in this example) is set as the value for the variable “response_01”. 
+
+*Built-in Response Variables:*
+
+There are two built-in response variables: 'numAttempts' and 'duration'. These are declared implicitly and should be updated by the QML player when a candidate is interacting with the question.
+
+- **numAttempts**: An integer that records the number of attempts at each question the candidate has taken (if multiple attempts are allowed in the context where the question is being used).
+- **duration**: A float that records the accumulated time (in seconds) of all candidate sessions for all attempts. In other words, the time between the beginning and the end of the question session minus any time the session was in the suspended state. 
+
 #### Asset Variables
 
 #### i18n Variables
