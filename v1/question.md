@@ -378,6 +378,107 @@ Answers:
 ```
 
 #### Response Processing
+There are two ways of configuring response processing:
+1. Question authors can provide custom response processing logic as javascript code for their questions. This logic can use the available library methods to get/set question variables.
+2. Question authors can use/configure one of the provided response processing templates to process the response of the question.
+
+##### Custom Response Processing
+The custom response processing logic using javascript should be defined as part of the “eval” attribute of “responseProcessing” data. 
+
+Sample Custom Response Processing:
+
+```
+{
+    “responseProcessing”: {
+           “eval”: “
+                    <!-- mapResponse() is a built-in library method --> 
+                    mapResponse();
+                    var score = getOutcomeVariable(\“SCORE\”);
+                    If (score >= 1.0) {
+                            setOutcomeVariable(\“FEEDBACK\”, “feedback_01”);
+                    } else if (score > 0 && score < 1.0) {
+                            setOutcomeVariable(\“FEEDBACK\”, “feedback_02”);
+                    } else if (score <= 0) {
+                            setOutcomeVariable(\“FEEDBACK\”, “feedback_03”);
+                    }
+            “
+    }
+}
+```
+
+> custom “eval” data is mandatory if response processing templates are not used for the question. If both template and evaluation logic are present, template is executed first and then the custom evaluation logic is executed.
+
+##### Response Processing Templates
+Custom response processing involves the application of a set of response rules, including the testing of response conditions and the evaluation of logic involving the question variables. For QML implementations that are only designed to support very simple use cases, the implementation of a system for carrying out this evaluation, conditional testing and processing may pose a barrier to the adoption of the specification.
+
+To alleviate this problem, the implementation of generalized response processing is an optional feature. Players that do not support it can instead implement a smaller number of standard response processors called response processing templates. These templates are also defined using javascript for evaluation of logic and should be implemented by the QML implementation. 
+
+Following are two standard response processing templates defined in QML (an additional template for response processing using templates is defined in the Template Processing section):
+
+**MATCH_CORRECT**
+
+This response processing template matches the value of response variables with their correct value using correctAnswer attribute defined in responseDeclaration. It sets the outcome variable SCORE to either 0 or 1 depending on the outcome of the test. To use this template, all response variables must have been declared and have an associated correct value. Similarly, the outcome variable SCORE must also have been declared.
+
+**MAP_RESPONSE**
+
+The map response processing template uses the mapping and areaMapping definitions of response variables in responseDefinition to set value for the outcome SCORE. To use this template, all response variables must have been declared and must have an associated mapping. Similarly, the outcome variable SCORE must also have been declared.
+
+The map response processing template optionally takes a mapping config as input. This config is to set other outcome variables based on the value of SCORE outcome variable. If no config is provided, these templates set the value of SCORE outcome only. The structure of mapping config is as shown below.
+
+*MappingConfig:*
+
+Mapping config should be provided in JSON format. It comprises of the list of outcome variables and their values for various possible scores.
+
+```
+{
+<!-- mappingConfig is a list of configurations for different possible SCORE values -->
+    “mappingConfig”: [
+           {
+<!-- each config has a SCORE section to define the range of SCORE values and an outcomeVariables section to define the values to be set when the SCORE falls in the defined range -->
+                 “SCORE”: {
+<!-- SCORE definition allows the usage of the operators: le (less than or equal to), lt (less than), eq (equals to), ge (greater than or equals to), gt (greater than) and in (in a list of values). One operator can be used only once in a SCORE definition. e.g.: “lt”: 1.0-->
+                          “<operator_1>”: <float value>,
+			  “<operator_2>”: <float value>, ...
+<!-- alternatively, a regex can also be used to define the SCORE range-->
+                          “regex”: <regular expression>
+                 },
+                 “outcomeVariables”: {
+<!-- list of outcome variables, defined in outcomeDeclaration, and the values to be set for each of the variables when the computed SCORE falls in the defined range -->
+                          “<outcome_variable>”: <value>
+                 }
+           }
+    ]
+}
+
+```
+
+Following is the sample usage of response processing templates. The sample javascript response processing provided above (in the Custom Response Processing section) can also be done using MAP_RESPONSE template:
+
+```
+{
+    “responseProcessing”: {
+           “template”: “MAP_RESPONSE”,
+           “mappingConfig”: [
+                   {
+                           “SCORE”: {“ge”: 1.0},
+                           “outcomeVariables”: {“FEEDBACK”: “feedback_01”}
+                   },
+                   {
+                           “SCORE”: {“gt”: 0, “lt”: 1},
+                           “outcomeVariables”: {“FEEDBACK”: “feedback_02”}
+                   },
+                   {
+                           “SCORE”: {“le”: 1.0},
+                           “outcomeVariables”: {“FEEDBACK”: “feedback_03”}
+                   }
+           ]
+    }
+}
+```
+
+> QML implementations that do not support custom response processing but do support response processing mechanisms that go beyond the standard templates described above can define templates of their own. Authors wishing to write questions for those implementations can then refer to these custom templates. Publishing these custom templates will then ensure that these questions can be used with QML players that do support generalized response processing.
+
+#### Template Declaration
 
 #### Template Processing
 
