@@ -74,3 +74,72 @@ Sets the value of outcome variable SCORE using matchTemplate configuration passe
 
 
 ### Question Set Library Methods
+
+#### getQuestionSets
+Returns the identifiers of question sets that are members of the question set.
+
+*Returns:*
+- list of question set identifiers, NULL if the question set do not have any member sets
+
+#### getQuestions
+Returns the identifiers of questions that are members of the question set.
+
+*Returns:*
+- list of question identifiers, NULL if the question set do not have any member questions
+	
+#### getQuestionSetOutcomeVariables
+Returns a map of outcome variables and their values for the specified question set identifier. The question set should be a member of the current question set.
+
+*Parameters:*
+- identifier of the question set which is a member of the current question set
+
+*Returns:*
+- map of outcome variables and values of the specified question set, NULL if the question set is not a member of the current question set
+
+#### getQuestionSetDuration
+Returns the time spent (in milliseconds) for the specified question set identifier. The question set should be a member of the current question set.
+
+*Parameters:*
+- identifier of the question set which is a member of the current question set
+
+*Returns:*
+- duration of the specified set in the current session, NULL if the question set is not a member of the current question set or if the question set is not attempted by the user in the current session
+
+#### getQuestionOutcomeVariables
+Returns a map of outcome variables and their values for the specified question identifier. The question should be a member of the current question set.
+
+*Parameters:*
+- identifier of the question which is a member of the current question set
+
+*Returns:*
+- map of outcome variables and values of the specified question, NULL if the question is not a member of the current question set
+
+#### getQuestionResponseVariables
+Returns a map of response variables (including built-in variables numAttempts & duration) and their values for the specified question identifier. The question should be a member of the current question set.
+
+*Parameters:*
+- identifier of the question which is a member of the current question set
+
+*Returns:*
+- map of response variables and values of the specified question, NULL if the question is not a member of the current question set
+
+#### getOutcomeVariable
+Returns the value of a outcome variable. If no outcome variable is found or if the value is not set, NULL value will be returned.
+
+*Parameters:*
+- name of the outcome variable
+
+*Returns:*
+- value of the outcome variable
+
+#### setOutcomeVariable
+Sets the specified value for specified outcome variable. 
+
+*Parameters:*
+- name of the outcome variable
+- value to be set for the specified outcome variable
+
+*Returns:*
+- true, if the outcome variable is updated successfully
+- false, if the outcome variable is not updated, e.g.: if variable is not declared or if the data type of the value does not match with the declaration
+
