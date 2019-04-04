@@ -2,7 +2,7 @@
 
 Question Markup Language (QML in short) is a specification for storage, rendering and distribution of Questions and Tests. QML allows assessment materials to be authored and delivered on multiple systems interchangeably. It is designed to facilitate interoperability between systems.
 
-This specification describes the information model for questions and tests used in assessments. Formally these are known as the Question and Question Set. QML specification describes a model for the representation of questions and question sets data and their corresponding results reports. Therefore, the specification enables the exchange of the question, question set and results data between authoring tools, question banks, test constructional tools, learning systems and assessment delivery systems.
+This specification is based on [IMS QTI Specification 2.2](http://www.imsglobal.org/question/index.html#version2.2) with necessary extensions. This specification describes the information model for questions and tests used in assessments. Formally these are known as the Question and Question Set. QML specification describes a model for the representation of questions and question sets data and their corresponding results reports. Therefore, the specification enables the exchange of the question, question set and results data between authoring tools, question banks, test constructional tools, learning systems and assessment delivery systems.
 
 ## Principles
 
