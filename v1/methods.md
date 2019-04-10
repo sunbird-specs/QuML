@@ -1,6 +1,6 @@
 ## Library Methods
 
-QML players should provide implementation for the library methods which can be used in response, template and outcome processing of questions and question sets. 
+QuML players should provide implementation for the library methods which can be used in response, template and outcome processing of questions and question sets. 
 
 ### Question Library Methods
 
