@@ -34,7 +34,7 @@ Map data type should be used for variables whose values are key-value pairs. Map
 | Attribute | Schema | Description |
 | --- | ----- | ----------- |
 | key | dataType: *string*, <br/> required: *true* | a map cannot contain duplicate keys and each key can map at most one value |
-| value | dataType: *any*, <br/> required: *false*, defaultValue: *NULL* | value can be of any other data type defined in QML. value is optional and is by default set to NULL, if not provided |
+| value | dataType: *any*, <br/> required: *false*, defaultValue: *NULL* | value can be of any other data type defined in QuML. value is optional and is by default set to NULL, if not provided |
 
 #### coordinate
 Coordinate data type should be used to represent coordinates (x and y) of a single point in a canvas.
@@ -58,9 +58,9 @@ Media data type should be used for representing a single media file. Media are r
 | Attribute | Schema | Description |
 | -- | ------ | --------- |
 | name | dataType: *string*, <br/> required: *true* | name of the media object |
-| mimeType | dataType: *string*, <br/> required: *true* | technical mime type of the asset used by QML players to understand the format of the asset. Supported types are image/png, audio/mp3, video/mp4, and video/webm |
+| mimeType | dataType: *string*, <br/> required: *true* | technical mime type of the asset used by QuML players to understand the format of the asset. Supported types are image/png, audio/mp3, video/mp4, and video/webm |
 | mediaType | dataType: *string*, required: *true* | type of the asset. this should be auto-derived from the mimeType value, current supported types are image, audio and video |
-| url | dataType: *string*, required: *true* | path of the media file. QML players will use this value to load all the media used in a question/test |
+| url | dataType: *string*, required: *true* | path of the media file. QuML players will use this value to load all the media used in a question/test |
 
 #### asset
 Asset data type should be used for representing a media asset which can be used in questions and/or tests. An asset is made up of multiple media, like variants of the same media file (mp4 vs webm, multiple resolutions of the same media file, etc), thumbnails, poster images, and icons. An asset contains all the information required to render a media.
