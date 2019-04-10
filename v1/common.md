@@ -1,6 +1,6 @@
 ## Common Elements
 
-All of the common elements used within this specification are described in this Document. Common elements include the data types, their properties, and common classes used by other objects defined in this specificaiton.
+All of the common elements used within this specification are described in this Document. Common elements include the data types, and their properties used in this specificaiton.
 
 ### Cardinality
 
@@ -53,7 +53,7 @@ Points data type should be used for variables whose values represent an area on 
 | coordinates | dataType: *list of coordinate objects*, <br/> required: *true* | Coordinates should have at least one coordinate object. The number of coordinates depend on the shape. |
 
 #### media
-Media data type should be used for representing a single media object. Media objects are re-usable to create assets which are used in questions and/or tests.
+Media data type should be used for representing a single media file. Media are re-usable to create assets which are used in questions and/or tests.
 
 | Attribute | Schema | Description |
 | -- | ------ | --------- |
