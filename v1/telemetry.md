@@ -15,6 +15,8 @@ generate telemetry events and send them to the QuML repository. Analysis of tele
 offers insights into behaviour and usage patterns, and thereby drive decisions,
 recommendations, and outcomes.
 
+![Telemtry conceptual diagram](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Telemetry_concept.png)
+
 ```
 Figure: Telemetry generation and processing
 ```
@@ -32,6 +34,8 @@ when the student's response is incorrect and student sees the solution. Similarl
 student may abandon the journey at any point (end the question session). Telemetry
 generated during this journey and the metrics computed using those events are
 indicated in figure below.
+
+![Telemtry sample flow of events](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Telemetry_sample_flow.png)
 
 ```
 Figure: Sample telemetry events and metrics in a question attempt
