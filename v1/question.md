@@ -121,7 +121,7 @@ A QuML Question comprises of the information model and associated binding that c
 
 QuML specification makes use of web standards like HTML, CSS, JSON, and Javascript to store the question data. The below figure shows the parts that comprise a QuML question:
 
-![Structure of a Question](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Structure.png)
+![Structure of a Question](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_structural_model.png)
 
 ```
 Figure: QuML Question Structural Model
@@ -194,18 +194,24 @@ There are four permitted values:
 4. ‘unknown’ - no assertion on the state of completion can be made.
 
 #### Body
-Question body contains the text, graphics, media objects and interactions that describe the question’s content and information about how it is structured. The body is presented by combining it with stylesheet and/or internationalization information, either explicitly or implicitly using the default style rules of the QML player.
+Body contains the text, graphics, media objects and interactions that describe the question’s content and information about how it is structured. The body is presented by combining it with stylesheet and/or internationalization information, either explicitly or implicitly using the default style rules of the QuML player.
+
+Body is presented to the student when the associated question session is in the *interacting* state. In this state, the student must be able to interact with each of the visible interactions and therefore set or update the values of the associated response variables.
+
+The body may be presented to the student when the question session is in the *finished* or *review* state. In these states, although the student’s responses should be visible, the interactions or the setting and/or updating the values of the associated response variables must be disabled.
+
+Finally, the body may be presented to the student in the *solution* state, in which case the correct values of the response variables must be visible and the associated interactions and/or response variable updates disabled.
 
 The structural elements of the item body are taken from HTML with the following restrictions:
 - It should contian only **structural, media and input HTML elements**. Structural elements include \<div>, \<span>, \<ul> and \<li>. Media html elements are img, audio and video elements. Input html elements are text input, text area, select, options, checkbox, radio buttons, file upload and canvas elements.
-- It should not contain a **\<form> element**
+- It should not contain **\<form> element**
 - It should not have any **javascript code**, i.e. \<script> elements or onXYZ (onClick, etc) for HTML elements should not be used
 - It should not have any **javascript import statements**
 - It should not have any **css import statements**
 
 In addition to the standard HTML elements and attributes, the specification allows the following in the question body: 
-- Usage for “data-” attributes to specify the interactions on HTML elements, bind response variables to the interactions, use asset, template and i18n variables.
-- Usage of standard style classes defined by the specificaiton. QML players should provide implementation for the defined classes.
+- Usage for “data-” attributes to specify the interactions on HTML elements, bind response variables to the interactions, use template and i18n variables.
+- Usage of standard style classes defined by the specificaiton. QuML players should provide implementation for the defined classes.
 
 Body:
 ```
@@ -215,17 +221,19 @@ Body:
 ```
 
 #### Interactions
-A question can contain zero or more interactions with the user. Interactions can be defined in the item body using HTML data attributes as shown in the below sample (**“data-<interaction_name>-interaction”**). 
+A question can contain zero or more interactions with the user. Most of these interactions are typical question types (for example, multiple choice, order elements, fill in the blanks). We can also use interactions for activities like "upload document," "draw a picture," and "start a film".
+
+Interactions can be defined in the item body using HTML data attributes as shown in the below sample (**“data-<interaction_name>-interaction”**). Each interaction should have an associated response variable that binds the interaction to a **“responseDeclaration”** with the same identifier. This is the link for the result and response processing, which are described later in this document.
 
 ```
 <input type="checkbox" name="element" data-multi-choice-interaction data-response-variable="response_01" value="Oxygen">
 ```
 
-QML specification defines the following interaction types. QML players should provide the implementation for all the defines interaction types. The behaviour of the interaction may vary in each implementation but should ensure that the defined specification is supported.
+QuML specification defines the following interaction types. QuML players should provide the implementation for all the defined interaction types. The behaviour of the interaction may vary in each implementation but should ensure that the defined specification is supported.
 
 ##### Simple Choice Interaction
 
-Simple choice interaction is used when a set of choices are presented to the student. The student’s task is to select one of the choices. This interaction must be bound to a response variable with single cardinality.
+The simple choice interaction is used when a set of choices are presented to the student. The student’s task is to select one of the choices. This interaction must be bound to a response variable with single cardinality (i.e. set only one value to the associated response variable).
 
 | **Data Attribute** | **data-simple-choice-interaction** |
 | --- | ----- |
@@ -235,7 +243,7 @@ Simple choice interaction is used when a set of choices are presented to the stu
 
 ##### Multi Choice Interaction
 
-Multi choice interaction is used when a set of choices are presented to the candidate. The candidate’s task is to select one or more of the choices. This interaction must be bound to a response variable with multiple cardinality. An array variable will be used to store the values for response variables of this interaction.
+The multi choice interaction is used when a set of choices are presented to the student. The student’s task is to select one or more of the choices. This interaction must be bound to a response variable with multiple cardinality (i.e. set a list of values to the associated response variable). An array variable will be used to store the values of response variable for this interaction.
 
 | **Data Attribute** | **data-multi-choice-interaction** |
 | --- | ----- |
@@ -245,7 +253,7 @@ Multi choice interaction is used when a set of choices are presented to the cand
 
 ##### Text Interaction
 
-A text interaction obtains a piece of text from the candidate. The QML player must allow the candidate to review their choice within the context of the question. The text interaction must be bound to a response variable with single cardinality only. The type must be one of string, integer, or float. 
+A text interaction obtains a piece of text from the student. The QuML player must allow the student to review their choice within the context of the question. The text interaction must be bound to a response variable with single cardinality only. The type must be one of string, integer, or float. 
 
 | **Data Attribute** | **data-text-interaction** |
 | --- | ----- |
@@ -255,7 +263,7 @@ A text interaction obtains a piece of text from the candidate. The QML player mu
 
 ##### Order Interaction
 
-In an order interaction, the candidate’s task is to reorder the choices. When specified, the candidate must select the choices and impose an ordering on them. If a default value is specified for the response variable associated with an order interaction then its value should be used to override the order of the choices specified here. The order interaction must be bound to a response variable with ordered cardinality and type must be one of string, integer or float.
+In an order interaction, the student’s task is to reorder the choices. When specified, the student must select the choices and impose an ordering on them. If a default value is specified for the response variable associated with an order interaction then its value should be used to override the order of the choices specified here. The order interaction must be bound to a response variable with ordered cardinality (i.e. list of ordered values).
 
 | **Data Attribute** | **data-ordered-interaction** |
 | --- | ----- |
@@ -263,7 +271,7 @@ In an order interaction, the candidate’s task is to reorder the choices. When 
 | type | string, integer or float |
 | html elements | \<ul> element. The values of all \<li> elements should be set in the same order as the value for response variable bound with the interaction |
 	
-> The order interaction implementation in the player should enable drag and drop of the \<li> elements in the \<ul> element with this interaction. QML players may choose to provide enhanced graphics/animation for order interaction.
+> The order interaction implementation in the player should enable drag and drop of the \<li> elements in the \<ul> element with this interaction. QuML players may choose to provide enhanced graphics/animation for order interaction.
 
 ##### Match Interaction
 
@@ -275,7 +283,7 @@ A match interaction presents candidates with two sets of choices and allows them
 | type | map |
 | html elements | Two \<ul> elements. Both the \<ul> elements should be bound to the same response variable. The list of values of \<li> element pairs (mapped with each other) should be set as the value of the response variable. |
 	
-> Similar to order interaction, the match interaction implementation in the player should enable drag and drop of \<li> elements in one \<ul> element on to \<li> elements in another \<ul> element with this interaction. QML players may choose to provide enhanced graphics/animation for match interaction.
+> Similar to order interaction, the match interaction implementation in the player should enable drag and drop of \<li> elements in one \<ul> element on to \<li> elements in another \<ul> element with this interaction. QuML players may choose to provide enhanced graphics/animation for match interaction.
 
 ##### Upload Interaction
 
@@ -291,7 +299,7 @@ The upload interaction allows the candidate to upload a pre-prepared file repres
 
 ##### Map Interaction
 
-The map interaction is a graphic interaction. The candidate’s task is to select one or more points on a canvas. The associated response may have a mapping that scores the response on the basis of comparing it against predefined areas but QML players must not indicate these areas of the image. Only the actual point(s) selected by the candidate shall be indicated. The map interaction must be bound to a response variable with type points and multiple cardinality.
+The map interaction is a graphic interaction. The candidate’s task is to select one or more points on a canvas. The associated response may have a mapping that scores the response on the basis of comparing it against predefined areas but QuML players must not indicate these areas of the image. Only the actual point(s) selected by the candidate shall be indicated. The map interaction must be bound to a response variable with type points and multiple cardinality.
 
 | **Data Attribute** | **data-map-interaction** |
 | --- | ----- |
@@ -301,10 +309,10 @@ The map interaction is a graphic interaction. The candidate’s task is to selec
 
 ##### Custom Interaction
 
-QML implementations can implement a set of custom interactions that go beyond the standard interactions described above. Authors wishing to write questions for those implementations can use these custom interactions. However these custom templates should be published to ensure that these questions can be used with QML players of other implementations. Otherwise, such questions will be limited to use only by that implementation.
+The custom interaction provides an opportunity for extensibility of this specification to include support for interactions not currently documented. QuML implementations can implement a set of custom interactions that go beyond the standard interactions described above. Authors wishing to write questions for those implementations can use these custom interactions. However these custom templates should be published to ensure that these questions can be used with QuML players of other implementations. Otherwise, such questions will be limited to use only by that implementation.
 
 #### CSS classes
-QML recommends the use of Cascading Style Sheets (CSS) for controlling the content formatting. QML has a defined set of standard classes for various different elements and interactions. A question can use those classes for formatting and QML players should provide implementation for these classes.
+QML recommends the use of Cascading Style Sheets (CSS) for controlling the content formatting. QML has a defined set of standard classes for various different elements and interactions. A question can use those classes for formatting and QuML players should provide implementation for these classes.
 
 - *1-col-layout*: style to create a one column layout
 - *2-col-layout*: style to create a two column layout
@@ -327,7 +335,7 @@ QML recommends the use of Cascading Style Sheets (CSS) for controlling the conte
 Alternatively when there is a need for formatting that is not provided by the defined classes, a question can also have custom css. The support of the CSS elements used for formatting is totally dependent on the browser used to render the question. Hence it is advised to use only CSS elements that are supported by all the commonly used browsers and browser versions.
 
 #### Instructions
-Some questions will have instructions of how to understand, attempt or how the question will be evaluated. Such instructions are defined in HTML format and stored in the instructions part of the question data. Instructions can contain i18n variables to support internationalization.
+Some questions will have instructions on how to understand, attempt or how the question will be evaluated. Such instructions are defined in HTML format and stored in the instructions part of the question data. 
 
 Instructions:
 ```
@@ -337,40 +345,22 @@ Instructions:
 ```
 
 #### i18n Data
-Internationalization is supported by QML to render texts inside body (instructions, answers, feedback and hints) in different locales. QML players should render all i18n variables in the selected locale. If localised value for a variable is not present in one of the locales, QML players should use the default value (provided for the variable in the declaration).
+Internationalization is supported by QuML to render texts inside  body (answers, feedback and hints) in different locales. To enable this, QuML allows storage of content in multiple locales.
 
-The i18n data should be stored in the question data in JSON format. The values for each of the i18n variables should be provided for each of the supported locales.
+For example, **body** in different locales should be stored in  body part of the question data as below:
 
-i18n:
+body:
 ```
 {
-	“i18n”: {
-		“<locale_1>”: {
-			“<i18_variable_1>”: “<localised_text>”,
-			… 
-		},
-		“<locale_2>”: {
-			“<i18_variable_1>”: “<localised_text>”,
-			… 
-		},
+	“body”: {
+		“<locale_1>”: "<div>...</div>",
+		“<locale_2>”: "<div>...</div>"
 		… 
 	}
 }
 ```
 
-#### Asset Declaration
-An **“assetDeclaration”** contains information about the assets used in the question. QML players should load the declared assets before rendering the question (before interacting state). Asset Declaration should have declaration for every asset variable used in the question. Asset declaration is defined in JSON format and stored in the assetDeclaration part of the question data.
-
-Asset Declaration:
-```
-{
-	“assetDeclaration”: {
-		“<asset_01>”: Asset object,
-		“<asset_02>”: Asset object,
-		… 
-	}
-}
-```
+In cases when internationalization is not required, the value of body (or of answers, instructions, feedback and hints) can be defined without the locale information.
 
 #### Response Declaration
 A **“responseDeclaration”** contains information about the answer (the response) to a question: When is it correct, and (optionally) how is it scored? 
