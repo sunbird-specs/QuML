@@ -98,7 +98,6 @@ These are advanced concepts used to introduce an element of adaptivity into the
 specification of a test. Pre-conditions enable some question sets to be skipped
 depending on the outcomes of some of the question sets presented earlier in the test.
 
-
 A branch rule is a simple expression attached to a question set that is evaluated after
 the question set has been presented to the student. If the expression evaluates to true
 the test jumps forward to the question set referred to by the target identifier or exit the
@@ -132,21 +131,15 @@ by using the variable name ​duration​.
 This section describes the data model of a question set. Question set data is used by QuML players while rendering a question set. In case when the question set is added to another question set, then the settings of the containing question set will override the configurations of the contained question set.
 
 #### Instructions
-Instructions for the question set can be defined in HTML format (similar to question instructions). Instructions can contain i18n variables to support internationalization.
+Similar to questions, question sets can also have instructions. Such instructions are defined in HTML format and stored in the  instructions  part of the question set data (similar to question instructions).
 
 Instructions:
 
 ```
 {
-	“instructions”: “<HTML>...</HTML>”
+	“instructions”: “<div>...</div>”
 }
 ```
-
-#### i18n variables
-i18n variables are used to enable internationalization, which can be used to localize the text used in question set. i18n variables can be referred to by i18nVariable objects in the instructions, feedback, and hints. The text, that needs to be localized, should be mapped with an i18n variable using the data attribute **“data-i18n-variable”** (similar to i18n variables of questions).
-
-#### i18n data
-Similar to questions, texts in a question set (instructions, feedback, hints) can also be rendered in multiple locales. The values for i18n variables in different locales should be defined as i18n data for the question set. The format of i18n data of question sets is same as that of questions.
 
 #### Feedback
 The feedback configuration for question sets is same as that of questions. Multiple feedbacks can be configured and each feedback should be defined in HTML format.
@@ -156,8 +149,8 @@ Feedback:
 ```
 {
 	“feedback”: {
-		“<feedback_1>”: “<HTML>...</HTML>”,
-		“<feedback_2>”: “<HTML>...</HTML>”,
+		“<feedback_1>”: “<div>...</div>”,
+		“<feedback_2>”: “<div>...</div>”,
 		… 
 	}
 }
@@ -171,12 +164,15 @@ Hints:
 ```
 {
 	“hints”: {
-		“<hint_1>”: “<HTML>...</HTML>”,
-		“<hint_2>”: “<HTML>...</HTML>”,
+		“<hint_1>”: “<div>...</div>”,
+		“<hint_2>”: “<div>...</div>”,
 		… 
 	}
 }	
 ```
+
+#### i18n data
+Texts in a question set (instructions, feedback, hints) can also be rendered in multiple locales. QuML allows instructions, feedback and hints to be defined in multiple locales (in the same way as defined for questions).
 
 #### Navigation mode
 The navigation mode determines the general paths that the student may take during the test session. It is an enumeration with two possible values: “linear” and “non-linear”.
@@ -193,7 +189,7 @@ Navigation Mode:
 - A question set in nonlinear mode removes this restriction - the student is free to navigate to any question in the question set at any time.
 
 #### Time limits
-This configuration is used by QML players to impose time limits (both minimum and maximum) for attempting a question set. The limits can be specified for the complete set or for one question in the set.
+The time limits (if any) for a question set can be defined as **timeLimits** data. Both minimum and maximum time constraints can be provided for the complete set and/or for one question as well. This configuration is used by QuML players to impose time limits (both minimum and maximum) for attempting a question set. 
 
 Time Limits:
 
@@ -213,7 +209,7 @@ Time Limits:
 ```
 
 #### Show Hints
-This configuration is used by QML players to enable/disable hints for the student while using the question set. It should be set to either true or false based on the context in which the question set is being used. 
+This configuration is used by QuML players to enable/disable hints for the student while using the question set. It should be set to either true or false based on the context in which the question set is being used. 
 
 Show Hints:
 
@@ -222,55 +218,6 @@ Show Hints:
 	“showHints”: “true | false”
 }
 ```
-
-#### Outcome Declaration
-Outcome declaration is a JSON object in key-value format (same as for questions). The keys in the JSON are the outcome variables and values are of type OutcomeVariableDef.
-
-OutcomeDeclaration:
-
-```
-{
-	“outcomeDeclaration”: {
-	  “<outcome_variable_1>”: OutcomeVariableDef Object,
-    “<outcome_variable_2>”: OutcomeVariableDef Object,
-    … 
-  }
-}
-```
-
-#### Outcome Processing
-Similar to response processing of questions, outcome processing rules of a question set can be defined using custom evaluation logic or use one of the existing outcome processing templates.
-
-##### Custom Outcome Processing
-The custom outcome processing logic using javascript should be defined as part of the “eval” attribute of “outcomeProcessing” data.
-
-```
-{
-    “outcomeProcessing”: {
-           “eval”: “<javascript code to set the outcome variables. Library methods can be used to refer and set question and question set variables>“
-    }
-}
-```
-
-> “eval” data is mandatory if outcome processing templates are not used for the question set. If both template and evaluation logic are present, template is executed first and then the custom evaluation logic is executed.
-
-##### Outcome Processing Templates
-Outcome processing takes place each time the student submits the responses for a question. It happens after any (question level) response processing triggered by the submission. Because outcome processing occurs each time the student submits responses, the resulting values of the question set outcomes may be used to activate question set level feedback during the test or to control the behaviour of subsequent parts through the use of preConditions and branchRules. 
-
-Similar to response processing of questions, outcome processing rules of a question set can be defined using custom evaluation logic or use one of the existing outcome processing templates. Following are the outcome processing templates defined in QML:
-
-1. **SUM_OF_SCORES**: This outcome processing template adds the value of SCORE outcome variables of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
-2. **AVG_OF_SCORES**: This outcome processing template computes the average of SCORE outcome values of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
-3. **WEIGHTED_AVG_OF_SCORES**: This template is similar to the AVG_OF_SCORES templates with an additional configuration to specify weightage for each question or question set. The weightage configuration can be provided using an additional parameter **weightageConfig** in outcome processing.
-
-Outcome processing schema for using outcome processing templates:
-
-| Attribute | Schema | Description |
-| --- | ----- | ----------- |
-| template | dataType: string, required: false, range: SUM_OF_SCORES, AVG_OF_SCORES, WEIGHTED_AVG_OF_SCORES | name of the outcome processing template to be used for the question. “template” is mandatory if outcome processing templates are used for the question |
-| ignoreNullValues | dataType: string, required: false, defaultValue: false | If set to true, the processing will ignore any SCORE outcomes that are null. This is relevant while using average based templates |
-| weightageConfig | dataType: map<string, float>, required: false | configuration to set weightages for questions or question sets when WEIGHTED_AVG_OF_SCORES template is used. If not provided, same weightage is given to all |
-| mappingConfig | dataType: string, required: false | configuration to set additional outcome variables (other than SCORE). Same as the mappingConfig defined in question responseProcessing specification |
 
 #### Questions
 If a question set contains questions, the association should be defined in the “questions” section. This section is mutually exclusive with “questionSets” section, i.e. a question set contain only either question sets or questions but not both.
@@ -307,21 +254,103 @@ QuestionSets:
 
 | Attribute | Schema | Description |
 | --- | ----- | ----------- |
-| questionSetId | dataType: string, required: true | |
-| shuffle | dataType: boolean, required: false, defaultValue: false | |
-| totalQuestions | dataType: integer, required: true | |
-| maxQuestions | dataType: integer, required: true | |
-| preConditions | dataType: list of PreConditionDef objects, required: false | Used to skip the question set depending on the outcome of question sets presented earlier.  |
+| questionSetId | dataType: string, required: true | identifier of the member question set |
+| shuffle | dataType: boolean, required: false, defaultValue: false | if questions in the member question set should be shuffled or not when presented to the student |
+| totalQuestions | dataType: integer, required: true | total number of questions in the member question set. applicable only if the member question set has questions |
+| maxQuestions | dataType: integer, required: true | number of questions in the member question set that should be used in one session. applicable only if the member question set has questions |
+| preConditions | dataType: list of PreConditionDef objects, required: false | conditions to be validated before rendering the question set. generally depends on the outcomes of question sets presented earlier in the session |
 | branchRules | dataType: list of BranchRuleDef objects, required: false | Evaluated after question set is complete and jumps forward to the specified target. |
 
 *PreConditionDef*
 
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| questionSetId | dataType: string, required: true | Identifier of the question set whose outcome will be used to do the precondition check |
+| match | dataType: list of OutcomeMatchDef objects, required: true | |
+
 *OutcomeMatchDef*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| outcomeVariable | dataType: string, required: true |  |
+| operator | dataType: boolean, required: true, range: lt, le, eq, gt, ge, in | |
+| value | dataType: any, required: true |  |
 
 *BranchRuleDef*
 
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| target | dataType: TargetSetDef, required: true |  |
+| match | dataType: list of OutcomeMatchDef objects, required: true | |
+
 *TargetSetDef*
+
+Target of a branch rule can be either another question set or exit of the question set. One (and only one) of these two must configured as a target for a branch rule.
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| questionSetId | dataType: string, required: false |  |
+| exit | dataType: boolean, required: false, defaultValue: false | |
+
+#### Outcome Declaration
+Question Sets also have outcome variables similar to Question outcome variables. They are also declared by outcome declarations. The same set of reserved and built-in variables defined for questions are applicable to question sets also. The only difference is that their value is set during outcome processing (in contrast to response processing of questions).
+
+Outcome declaration is a JSON object in key-value format (same as for questions). The keys in the JSON are the outcome variables and values are of type OutcomeVariableDef.
+
+OutcomeDeclaration:
+
+```
+{
+	“outcomeDeclaration”: {
+	  “<outcome_variable_1>”: OutcomeVariableDef Object,
+          “<outcome_variable_2>”: OutcomeVariableDef Object,
+    … 
+  }
+}
+```
+
+*OutcomeVariableDef*
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| cardinality | dataType: string, required: true, range: “single”, “multiple”, “ordered” | Used to specify whether the outcome variable will have a single value, multiple values or an ordered list of values. |
+| type | dataType: string, required: true, range: “string”, “integer”, “float”, “boolean”, “map”, “uri”, “points”, “coordinate” | |
+| defaultValue | dataType: any, required: false | |
+| range | dataType: list of any, required: false | |
+
+
+#### Outcome Processing
+Outcome processing takes place each time the student submits the responses for a question. It happens after any (question level) response processing triggered by the submission. Because outcome processing occurs each time the student submits responses, the resulting values of the question set outcomes may be used to activate question set level feedback during the test or to control the behaviour of subsequent parts through the use of preConditions and branchRules.
+
+Similar to response processing of questions, outcome processing rules of a question set can be defined using custom evaluation logic or use one of the existing outcome processing templates.
+
+##### Custom Outcome Processing
+The custom outcome processing logic using javascript should be defined as part of the “eval” attribute of “outcomeProcessing” data.
+
+```
+{
+    “outcomeProcessing”: {
+           “eval”: “<javascript code to set the outcome variables. Library methods can be used to refer and set question and question set variables>“
+    }
+}
+```
+
+> “eval” data is mandatory if outcome processing templates are not used for the question set. If both template and evaluation logic are present, template is executed first and then the custom evaluation logic is executed.
+
+##### Outcome Processing Templates
+
+1. **SUM_OF_SCORES**: This outcome processing template adds the value of SCORE outcome variables of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+2. **AVG_OF_SCORES**: This outcome processing template computes the average of SCORE outcome values of questions or question sets that are part of the question set and sets the computed value as the SCORE outcome of the question set.
+3. **WEIGHTED_AVG_OF_SCORES**: This template is similar to the AVG_OF_SCORES templates with an additional configuration to specify weightage for each question or question set. The weightage configuration can be provided using an additional parameter **weightageConfig** in outcome processing.
+
+Outcome processing schema for using outcome processing templates:
+
+| Attribute | Schema | Description |
+| --- | ----- | ----------- |
+| template | dataType: string, required: false, range: SUM_OF_SCORES, AVG_OF_SCORES, WEIGHTED_AVG_OF_SCORES | name of the outcome processing template to be used for the question. “template” is mandatory if outcome processing templates are used for the question |
+| ignoreNullValues | dataType: string, required: false, defaultValue: false | If set to true, the processing will ignore any SCORE outcomes that are null. This is relevant while using average based templates |
+| weightageConfig | dataType: map<string, float>, required: false | configuration to set weightages for questions or question sets when WEIGHTED_AVG_OF_SCORES template is used. If not provided, same weightage is given to all |
+| mappingConfig | dataType: string, required: false | configuration to set additional outcome variables (other than SCORE). Same as the mappingConfig defined in question responseProcessing specification |
 
 ### Question Set Metadata
 
-### Usage Data and Results Reporting
