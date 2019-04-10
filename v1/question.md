@@ -117,11 +117,81 @@ responses to the question.
 
 ### Question Data Model
 
-A QML Question comprises of the information model and associated binding that can be used to store, represent and deliver questions. A question can be defined as a set of interactions (possibly empty) collected together with any supporting material and an optional set of rules for converting the student’s response(s) into outcomes. Question contains the definition for the interactions, variables to store responses, logic to process the responses, outcome data and other components that are needed for question delivery.
+A QuML Question comprises of the information model and associated binding that can be used to store, represent and deliver questions. A question can be defined as a set of interactions (possibly empty) collected together with any supporting material and an optional set of rules for converting the student’s response(s) into outcomes. Question contains the definition for the interactions, variables to store responses, logic to process the responses, outcome data and other components that are needed for question delivery.
 
-QML specification makes use of web standards like HTML, CSS, JSON, and Javascript to store the question data. The below diagram shows the components within a question and format used to store/represent the component.
+QuML specification makes use of web standards like HTML, CSS, JSON, and Javascript to store the question data. The below figure shows the parts that comprise a QuML question:
 
 ![Structure of a Question](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Structure.png)
+
+```
+Figure: QuML Question Structural Model
+```
+
+#### Question Variables
+
+QuML defines multiple types of variables that are useful for different purposes at different states of a question session. The specification defines the places where and how these variables can be declared, initialised, updated and used.
+
+Question variables are declared by variable declarations: response, outcome or template variables. All variables must be declared except for the built-in variables, referred to below, which are declared implicitly and must not be declared. The purpose of the declaration is to associate an identifier with the variable and to identify the runtime type of the variable's value. The variables are also optionally initialised at the time of declaration.
+
+**Response Variables**
+
+Response variables are used to capture the response of student. These variables are generated as a result of an interaction of student with the question. The expected values for response variables are declared in “response declarations” and bound to interactions in the question. Each response variable declared may be bound to one and only one interaction. At runtime, response variables are instantiated as part of a question session.
+
+A response variable with a NULL value indicates that the student has not offered a response, either because they have not attempted the question at all or because they have attempted it and chosen not to provide a response. If a default value has been provided for a response variable then the variable is set to this value at the start of the first attempt. If the student never attempts the question, in other words, the question session passes straight from the  “start” state to the  “finished” state without going through the interacting state, then the response variable remains NULL and the default value is never used.
+
+Response variables can be used within the question body using the html data attribute: **“data-response-variable”**. This data attribute should be set on HTML elements that are used by candidates for interacting with the question. And when the candidate uses the HTML element for interaction, the corresponding response variable should be updated with the value of the HTML element. 
+
+```
+<input type="checkbox" name="element" data-response-variable="response_01" value="Oxygen" data-multi-choice-interaction>
+```
+
+In the above sample, there is response variable named “response_01” defined on the HTML checkbox element. When a candidate selects the checkbox, the value of the checkbox element (Oxygen, in this example) is set as the value for the variable “response_01”. 
+
+##### Built-in Response Variables
+There are two built-in response variables: 'numAttempts' and 'duration'. These are declared implicitly and should be updated by QuML players when a candidate is interacting with the question.
+
+- **numAttempts**: An integer that records the number of attempts at each question the candidate has taken (if multiple attempts are allowed in the context where the question is being used). The value defaults to 0 initially and then increases by 1 at the start of each attempt.
+- **duration**: A float that records the accumulated time (in seconds) of all candidate sessions for all attempts. In other words, the time between the beginning and the end of the question session minus any time the session was in the suspended state. 
+
+**Template Variables**
+
+Template variables are used in templatized questions, which can be used to produce large number of similar questions. Template variables can be referred to by templateVariable objects in the question body.
+
+Template variables can be referred to by using the html data attribute **“data-template-variable”** in the question body. This data attribute should be set on HTML elements which need to be templatized. And the template variables are resolved and replaced by an absolute value before the question is presented to a student. The rules for assigning values to template variables should be defined in the **“templateProcessing”** section of the question data.
+
+This data attribute should be set on a \<span> element around a text that needs to be templatized. And when the question session starts, the text within the \<span> gets replaced with the value generated by template processing rule for the corresponding template variable.
+
+```
+Shyam has <span data-template-variable="template_var_fruit_number_1">5</span> <span data-template-variable="template_var_fruit_name">apples</span>.
+
+Ram borrowed <span data-template-variable="template_var_fruit_number_2">3</span> <span data-template-variable="template_var_fruit_name">apples</span> from Shyam.
+
+Shyam now has <input type="text" data-text-interaction data-response-variable="response_01" /> <span data-template-variable="template_var_fruit_name">apples</span>.
+```
+
+The above question is for subtraction, where the learner is asked to identify the number of apples Shyam has after Ram borrowed 3 of the 5 apples which Shyam had. Instead of showing the same numbers and fruit name always, the numbers and name of the fruit is templatized in the item body using template variables.
+
+**Outcome Variables**
+
+Outcome variables are declared by outcome declarations. Their value is set either from a default given in the declaration itself or during “response processing”. These variables are used for returning the score or for controlling the feedback to the student.
+
+There are six reserved outcome variables:
+
+- Questions that declare a numeric outcome variable representing the student’s overall performance on the question should use the outcome name **‘SCORE’** for the variable. SCORE needs to be a float.
+- Questions that provide a feedback to student after the attempt should use the outcome variable **‘FEEDBACK’** to show the appropriate feedback modal. FEEDBACK needs to be a string.
+- Questions that have in-built hints to help students in attempting the question should use the outcome variable **‘HINT’**. The value of this variable should be used by the QuML players to render the corresponding hint. HINT needs to be a string.
+- Questions that declare a maximum score (in multiple response choice questions, for example) should do so by declaring the **‘MAXSCORE’** variable. MAXSCORE needs to be a float.
+- Questions that declare a minimum score (minimum score to mark the student as passed) should do so by declaring the **‘MINSCORE’** variable. MINSCORE needs to be a float.
+- Questions or tests that want to make the fact that the student scored above a predefined threshold available as a variable should use the **‘PASSED’** variable. PASSED needs to be a boolean. This variable is automatically set after response processing using the SCORE and MINSCORE outcome variables.
+
+##### Built-in Outcome Variables
+There is one built-in outcome variable, **‘completionStatus’**, that is declared implicitly and must not appear in outcome variables declaration. QuML players must maintain the value of the built-in outcome variable completionStatus. It starts with the reserved value “not_attempted”. At the start of the first attempt, it changes to the reserved value “unknown”. It remains with this value for the duration of the question session unless set to a different value by a setOutcomeValue in responseProcessing. This variable changes to the reserved value “completed” by default if it is not updated during response processing. 
+
+There are four permitted values:
+1. ‘completed’ - the student has experienced enough of the question to consider it completed;
+2. ‘incomplete’ - the student has not experienced enough of the question to consider it completed;
+3. ‘not_attempted’ - the student is considered to have not used the question in any significant way;
+4. ‘unknown’ - no assertion on the state of completion can be made.
 
 #### Body
 Question body contains the text, graphics, media objects and interactions that describe the question’s content and information about how it is structured. The body is presented by combining it with stylesheet and/or internationalization information, either explicitly or implicitly using the default style rules of the QML player.
@@ -232,75 +302,6 @@ The map interaction is a graphic interaction. The candidate’s task is to selec
 ##### Custom Interaction
 
 QML implementations can implement a set of custom interactions that go beyond the standard interactions described above. Authors wishing to write questions for those implementations can use these custom interactions. However these custom templates should be published to ensure that these questions can be used with QML players of other implementations. Otherwise, such questions will be limited to use only by that implementation.
-
-#### Response Variables
-Response variables are used to capture the response of candidate. These variables are generated as a result of an interaction of candidate with the question.
-
-Response variables can be used within the question body using the html data attribute: “data-response-variable”. This data attribute should be set on HTML elements that are used by candidates for interacting with the question. And when the candidate uses the HTML element for interaction, the corresponding response variable should be updated with the value of the HTML element. 
-
-```
-<input type="checkbox" name="element" data-response-variable="response_01" value="Oxygen" data-multi-choice-interaction>
-```
-
-In the above sample, there is response variable named “response_01” defined on the HTML checkbox element. When a candidate selects the checkbox, the value of the checkbox element (Oxygen, in this example) is set as the value for the variable “response_01”. 
-
-##### Built-in Response Variables
-There are two built-in response variables: 'numAttempts' and 'duration'. These are declared implicitly and should be updated by the QML player when a candidate is interacting with the question.
-
-- **numAttempts**: An integer that records the number of attempts at each question the candidate has taken (if multiple attempts are allowed in the context where the question is being used).
-- **duration**: A float that records the accumulated time (in seconds) of all candidate sessions for all attempts. In other words, the time between the beginning and the end of the question session minus any time the session was in the suspended state. 
-
-#### Asset Variables
-Asset variables are used to load assets during the rendering of a question. Values for asset variables are declared in “asset declarations” and bound to HTML elements in the question. Asset variables can be used in a question using the html data attribute: **“data-asset-variable”**. This data attribute should be set on HTML elements that are used for rendering assets (e.g. img, audio and video elements). And when the question is being rendered, the value of asset variable is set as the source of the HTML element on which the asset variable is declared.
-
-```
-<img src="assets/apple.png" data-asset-variable="asset_01" >
-```
-
-Optionally, a default source can also be provided for the asset HTML elements. The default gets overridden by the value from asset declaration at the time of rendering the question. If an asset variable is not declared or a value is not set in asset declaration, the default value of the source will be used by the QML players.
-
-> QML implementations should upload assets to the QML repository server and only relative paths should be used in asset variables and asset declarations. QML players should proxy the relative paths to render the assets either from the QML repository server or from local storage (offline mode).
-
-#### i18n Variables
-i18n variables can be referred to by i18nVariable objects in the question body, instructions, answers, feedback, and hints. The text, that needs to be localized, should be mapped with an i18n variable using the data attribute **“data-i18n-variable”**. This data attribute should be set on a \<span> element around a text that needs to be localised. And when the question session starts, the text within the \<span> gets replaced with the locale specific value of the text.
-
-```
-<span data-i18n-variable="text_1">Ram has 3 apples</span>.
-```
-
-#### Template Variables
-Template variables can be referred to by using the html data attribute **“data-template-variable”** in the question body. The value of the template variable is used to create an appropriate run of text that is displayed. This data attribute should be set on a \<span> element around a text that needs to be templatized. And when the question session starts, the text within the \<span> gets replaced with the value generated by template processing rule for the corresponding template variable.
-
-```
-Shyam has <span data-template-variable="template_var_fruit_number_1">5</span> <span data-template-variable="template_var_fruit_name">apples</span>.
-
-Ram borrowed <span data-template-variable="template_var_fruit_number_2">3</span> <span data-template-variable="template_var_fruit_name">apples</span> from Shyam.
-
-Shyam now has <input type="text" data-text-interaction data-response-variable="response_01" /> <span data-template-variable="template_var_fruit_name">apples</span>.
-```
-
-The above question is for subtraction, where the learner is asked to identify the number of apples Shyam has after Ram borrowed 3 of the 5 apples which Shyam had. Instead of showing the same numbers and fruit name always, the numbers and name of the fruit is templatized in the item body using template variables.
-
-#### Outcome Variables
-Outcome variables are declared by outcome declarations. Their value is set either from a default given in the declaration itself or during “response processing”. These variables are used for returning the score or for controlling the feedback to the student.
-
-There are six reserved outcome variables:
-
-- Questions that declare a numeric outcome variable representing the student’s overall performance on the question should use the outcome name **‘SCORE’** for the variable. SCORE needs to be a float.
-- Questions that provide a feedback to student after the attempt should use the outcome variable **‘FEEDBACK’** to show the appropriate feedback modal. FEEDBACK needs to be a string.
-- Questions that have in-built hints to help students in attempting the question should use the outcome variable **‘HINT’**. The value of this variable should be used by the QML players to render the corresponding hint modal. HINT needs to be a string.
-- Questions that declare a maximum score (in multiple response choice questions, for example) should do so by declaring the **‘MAXSCORE’** variable. MAXSCORE needs to be a float.
-- Questions that declare a minimum score (minimum score to mark the student as passed) should do so by declaring the **‘MINSCORE’** variable. MINSCORE needs to be a float.
-- Questions or tests that want to make the fact that the student scored above a predefined threshold available as a variable should use the **‘PASSED’** variable. PASSED needs to be a boolean. This variable is automatically set after response processing using the SCORE and MINSCORE outcome variables.
-
-##### Built-in Outcome Variables
-There is one built-in outcome variable, **‘completionStatus’**, that is declared implicitly and must not appear in outcome variables declaration. QML players must maintain the value of the built-in outcome variable completionStatus. It starts with the reserved value “not_attempted”. At the start of the first attempt, it changes to the reserved value “unknown”. It remains with this value for the duration of the question session unless set to a different value by a setOutcomeValue in responseProcessing. This variable changes to the reserved value “completed” by default if it is not updated during response processing. 
-
-There are four permitted values:
-1. ‘completed’ - the student has experienced enough of the question to consider it completed;
-2. ‘incomplete’ - the student has not experienced enough of the question to consider it completed;
-3. ‘not_attempted’ - the student is considered to have not used the question in any significant way;
-4. ‘unknown’ - no assertion on the state of completion can be made.
 
 #### CSS classes
 QML recommends the use of Cascading Style Sheets (CSS) for controlling the content formatting. QML has a defined set of standard classes for various different elements and interactions. A question can use those classes for formatting and QML players should provide implementation for these classes.
