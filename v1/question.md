@@ -23,6 +23,8 @@ interacts with the question. There is no (or very little) knowledge of what the 
 consists of, what is the purpose and for whom it is intended for. This limits the re-use
 of questions in different scenarios and also by different systems.
 
+![Questions used as black box](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_black_box.png)
+
 ```
 Figure: Questions used only for SCORE output (black box model)
 ```
@@ -48,6 +50,8 @@ classified into four categories.
 
 #### ➢ Metadata​: This category comprises of the data that is needed to search, discover and compose questions into tests.
 
+![Anatomy of a QuML question](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_anatomy_quml.png)
+
 ```
 Figure: Anatomy of a QuML Question
 ```
@@ -64,6 +68,8 @@ render them with feedback and hints enabled.
 The below figure shows an overview of different components and actors involved in the
 questions creation and delivery.
 
+![System view](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_system_view.png)
+
 ```
 Figure: Overall system view for Questions
 ```
@@ -79,6 +85,8 @@ presented to the candidate multiple times e.g. during ‘drill and practice’. 
 occurrence or instance of the question is associated with its own question session. The
 following figure illustrates the user-perceived states of the question session.
 
+![Question session workflow](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_session_workflow.png)
+
 ```
 Figure: The life cycle of a question session
 ```
@@ -93,6 +101,8 @@ well-defined structure. Each component of the question comes into play at differ
 states of a question session. QuML implementations (players) use these components
 and perform the required action in-between state transitions. The below figure shows
 the actions performed by QuML players in between states of a question session.
+
+![Question session processes](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_session_components.png)
 
 ```
 Figure: Processes in a question session
