@@ -11,6 +11,8 @@ and data structure. If values of all metadata categories and data structure are 
 then an equivalence relation can be established between them. And if only medium and text data is different for 
 two questions, both the questions can be connected as translations of each other.
 
+![Connected question banks](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Appendix_connected_question_banks.png)
+
 ```
 Figure - Connected question banks
 ```
