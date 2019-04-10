@@ -32,6 +32,8 @@ assessments. Presenting questions from a question bank has many advantages. Firs
 it can ensure that questions are always fresh, do not become stale and repetitive and
 the questions can evolve in their precision of measuring the student’s proficiency.
 
+![Summative & Formative Assessments](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Assessment_Types.png)
+
 ```
 Figure: Summative and Formative Assessments
 ```
@@ -55,6 +57,8 @@ needs.
 Questions that are tagged with appropriate pedagogic metadata and associated with
 relevant concepts will enable “questioning” to be used as an effective means to
 encourage learning.
+
+![Questions as a means to learn](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Means_to_learn.png)
 
 ```
 Figure: Questions in a question bank with proper tagging and associations will enable multiple use-cases
@@ -85,6 +89,8 @@ the high costs of creation and can help preserve investments and intellectual as
 when hardware and software change, thus ensuring sustainability. This requires a
 standard, platform-neutral, vendor-independent interchange file format for
 e-assessments.
+
+![Common standard for questions](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Common_standard.png)
 
 ```
 Figure: A common standard will enable distributed assessments authoring and delivery
@@ -186,6 +192,8 @@ serve a ​wide variety of use cases and users​.
 In a nutshell, a microservices architecture centered around “questions”, with different
 platforms & applications as constituent services, is possible. It allows anyone to offer a
 scalable, entirely new application that uses QuML questions, effortlessly.
+
+![Services centered around questions](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Microservices_questions.png)
 
 ```
 Figure: Services centered around ​“QuML Questions”
