@@ -21,8 +21,7 @@ recommendations, and outcomes.
 Figure: Telemetry generation and processing
 ```
 
-QuML recommends usage of Sunbird platform’s (​http://www.sunbird.org/​) telemetry
-specification as the standard for telemetry events. QuML implementations should
+QuML recommends usage of Sunbird platform’s [telemetry specification](http://docs.sunbird.org/latest/developer-docs/telemetry/overview/) as the standard for telemetry events. QuML implementations should
 generate the telemetry events defined in the sunbird telemetry specification during the
 usage of questions and question sets.
 
