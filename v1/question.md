@@ -449,6 +449,8 @@ Response processing is the process by which QuML players assign outcomes based o
 
 The end of an attempt, and therefore response processing, must only take place in direct response to a user action or in response to some expected event, such as the end of a test. A question session that enters the suspended state may have values for the response variables that have yet to be submitted for response processing.
 
+![Question response processing](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_response_processing.png)
+
 ```
 Figure - The state diagram for response processing
 ```
@@ -692,6 +694,8 @@ A question can have template variable that are not used in the question â€œbodyâ
 
 #### Template Processing
 Template processing consists of one or more templateRules that are followed by the QuML players in order to assign values to the template variables. Template processing is identical in form to  responseProcessing except that the purpose is to assign values to template variables, not outcome variables, at the start of a question session.
+
+![Question template processing](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_template_processing.png)
 
 ```
 Figure - The state diagram for template processing
