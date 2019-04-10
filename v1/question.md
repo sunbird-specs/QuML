@@ -1,4 +1,4 @@
-## Question Information Model
+## QuML for Questions
 
 Digital assessments become easier with a standard format for the exchange of
 questions and structures, scoring information, the ability to analyze results, and ways
@@ -365,7 +365,12 @@ In cases when internationalization is not required, the value of body (or of ans
 #### Response Declaration
 A **“responseDeclaration”** contains information about the answer (the response) to a question: When is it correct, and (optionally) how is it scored? 
 
-Response Declaration should have declaration for every response variable in the question body. Response declaration is a JSON object in key-value format. The keys in the JSON are the response variables defined in the body and values are of type ResponseVariableDef.
+Response Declaration should have declaration for every response variable in the question body. Optionally, the declaration can have the following details:
+
+- *Correct Response:*  Correct (or optimal) values for the response variable
+- *Mapping to Score:* Map different values to score so that a response can have more nuances than plain right or wrong, e.g.: a multiple choice question with more than one correct answer can support partial scoring
+
+Response declaration is a JSON object in key-value format. The keys in the JSON are the response variables defined in the body and values are of type ResponseVariableDef.
 
 ResponseDeclaration:
 ```
@@ -413,9 +418,9 @@ Each response variable should have exactly one response variable definition in t
 | value | dataType: float, required: true |  |
 
 #### Outcome Declaration
-An “outcomeDeclaration” contains information about the outcome variables of the question, i.e the values that are output of a question session (QML player should make the outcome variables available to the context in which the question is being used).
+An “outcomeDeclaration” contains information about the outcome variables of the question, i.e the values that are output of a question session. QuML players should make the outcome variables available to the context in which the question is being used. For example, a test session uses the values of outcome variables of constituent questions to process the outcome of the test.
 
-Outcome declaration is a JSON object in key-value format. The keys in the JSON are the outcome variables and values are of type OutcomeVariableDef.
+Outcome declaration is a JSON object in key-value format. The keys in the JSON are the outcome variables  and values are of type OutcomeVariableDef.
 
 OutcomeDeclaration:
 ```
@@ -439,66 +444,15 @@ Each outcome variable should have exactly one outcome variable definition in the
 | defaultValue | dataType: any, required: false |  |
 | range | dataType: List of any, required: false |  |
 
-#### Feedback
-Feedback is a JSON object in key-value format. The keys in the JSON are the identifiers of different feedbacks for the question and values are HTML snippet to be shown to the candidate. After the response processing, the QML player renders the feedback HTML mapped to the value that is set to the FEEDBACK outcome variable. Feedback can contain i18n variables to support internationalization.
-
-Feedback:
-
-```
-{
-	“feedback”: {
-		“<feedback_1>”: “<HTML>...</HTML>”,
-		“<feedback_2>”: “<HTML>...</HTML>”,
-		… 
-	}
-}
-```
-
-#### Hints
-Hints are shown to the candidates after response processing or when the student requests for hints.
-- HINT outcome variable value is used to render the hint after response processing.
-- Alternatively, QML players can provide an option for students to request for hints. Upon request, the QML player renders all the configured hints in a sequence (as defined in the hints configuration).
-
-In either case, hints are shown only if they are allowed in the context where the question is being used. Hints is a JSON object in key-value format. The keys in the JSON are the identifiers of different hints for the question and values are HTML snippet for hints.
-
-Hints is a JSON object in key-value format. The keys in the JSON are the identifiers of different hints for the question and values are HTML snippet for hints. Hints can contain i18n variables to support internationalization.
-
-Hints:
-
-```
-{
-	“hints”: {
-		“<hint_1>”: “<HTML>...</HTML>”,
-		“<hint_2>”: “<HTML>...</HTML>”
-		… 
-	}
-}
-```
-
-#### Answers
-Providing exemplar answers for questions aid candidates in-depth learning and enhance candidate’s understanding of the concepts. These answers are mainly helpful for candidates in preparing for exams. Multiple answers can be configured for a question and each answer can have one or more parts, each part could be either text, rich text (HTML5), or a set of assets (images, audios, or videos).
-
-Answers:
-
-```
-{
-	“answers”: [
-	{
-		"parts": [{
-				"body": “<HTML>...</HTML>”,
-				"assets": [list of Asset objects],
-				"comment": "optional comment for the answer part"
-			},
-			{ ... }
-		]
-		“comment”: “optional comment for the answer”
-	},
-	{ ... }
-	]
-}
-```
-
 #### Response Processing
+Response processing is the process by which QuML players assign outcomes based on the student’s responses. The state representation for the response processing is shown in the following figure. The outcomes may also be used to provide feedback to the student. Feedback is either provided immediately following the end of the student’s attempt or it is provided at some later time, perhaps as part of a summary report on the question session.
+
+The end of an attempt, and therefore response processing, must only take place in direct response to a user action or in response to some expected event, such as the end of a test. A question session that enters the suspended state may have values for the response variables that have yet to be submitted for response processing.
+
+```
+Figure - The state diagram for response processing
+```
+
 There are two ways of configuring response processing:
 1. Question authors can provide custom response processing logic as javascript code for their questions. This logic can use the available library methods to get/set question variables.
 2. Question authors can use/configure one of the provided response processing templates to process the response of the question.
@@ -530,21 +484,21 @@ Sample Custom Response Processing:
 > custom “eval” data is mandatory if response processing templates are not used for the question. If both template and evaluation logic are present, template is executed first and then the custom evaluation logic is executed.
 
 ##### Response Processing Templates
-Custom response processing involves the application of a set of response rules, including the testing of response conditions and the evaluation of logic involving the question variables. For QML implementations that are only designed to support very simple use cases, the implementation of a system for carrying out this evaluation, conditional testing and processing may pose a barrier to the adoption of the specification.
+Custom response processing involves the application of a set of response rules, including the testing of response conditions and the evaluation of logic involving the question variables. For QuML implementations that are only designed to support very simple use cases, the implementation of a system for carrying out this evaluation, conditional testing and processing may pose a barrier to the adoption of the specification.
 
-To alleviate this problem, the implementation of generalized response processing is an optional feature. Players that do not support it can instead implement a smaller number of standard response processors called response processing templates. These templates are also defined using javascript for evaluation of logic and should be implemented by the QML implementation. 
+To alleviate this problem, the implementation of generalized response processing is an optional feature. Players that do not support it can instead implement a smaller number of standard response processors called response processing templates. These templates are also defined using javascript for evaluation of logic and should be implemented by the QuML implementation. 
 
 Following are two standard response processing templates defined in QML (an additional template for response processing using templates is defined in the Template Processing section):
 
 **MATCH_CORRECT**
 
-This response processing template matches the value of response variables with their correct value using correctAnswer attribute defined in responseDeclaration. It sets the outcome variable SCORE to either 0 or 1 depending on the outcome of the test. To use this template, all response variables must have been declared and have an associated correct value. Similarly, the outcome variable SCORE must also have been declared.
+This response processing template matches the value of response variables with their correct value using **correctAnswer** attribute defined in **responseDeclaration**. It sets the outcome variable SCORE to either 0 or 1 depending on the outcome of the test. To use this template, all response variables must have been declared and have an associated correct value. Similarly, the outcome variable SCORE must also have been declared.
 
 **MAP_RESPONSE**
 
-The map response processing template uses the mapping and areaMapping definitions of response variables in responseDefinition to set value for the outcome SCORE. To use this template, all response variables must have been declared and must have an associated mapping. Similarly, the outcome variable SCORE must also have been declared.
+The map response processing template uses the **mapping** and **areaMapping** definitions of response variables in **responseDefinition** to set value for the outcome SCORE. To use this template, all response variables must have been declared and must have an associated mapping. Similarly, the outcome variable SCORE must also have been declared.
 
-The map response processing template optionally takes a mapping config as input. This config is to set other outcome variables based on the value of SCORE outcome variable. If no config is provided, these templates set the value of SCORE outcome only. The structure of mapping config is as shown below.
+The map response processing template optionally takes a **mapping config** as input. This config is to set other outcome variables based on the value of SCORE outcome variable. If no config is provided, these templates set the value of SCORE outcome only. The structure of mapping config is as shown below.
 
 *MappingConfig:*
 
@@ -597,10 +551,99 @@ Following is the sample usage of response processing templates. The sample javas
 }
 ```
 
-> QML implementations that do not support custom response processing but do support response processing mechanisms that go beyond the standard templates described above can define templates of their own. Authors wishing to write questions for those implementations can then refer to these custom templates. Publishing these custom templates will then ensure that these questions can be used with QML players that do support generalized response processing.
+> QuML implementations that do not support generalized response processing (custom evaluation) but do support response processing mechanisms that go beyond the standard templates described above can define templates of their own. Authors wishing to write questions for those implementations can then refer to these custom templates. Publishing these custom templates will then ensure that these questions can be used with QuML players that do support generalized response processing.
+
+#### Feedback
+Feedback is shown to the students following response processing. The value of outcome variable “FEEDBACK” is used to determine whether or not the feedback is shown. Feedback is shown only if it is allowed in the context where the question is being used.
+
+Feedback is a JSON object in key-value format. The keys in the JSON are the identifiers of different feedbacks for the question and values are HTML snippet to be shown to the student. After the response processing, the QuML player renders the feedback HTML mapped to the value that is set to the FEEDBACK outcome variable.
+
+Feedback:
+
+```
+{
+	“feedback”: {
+		“<feedback_1>”: “<div>...</div>”,
+		“<feedback_2>”: “<div>...</div>”,
+		… 
+	}
+}
+```
+
+To support internationalization, feedback in multiple locales should be provided (for each value of feedback) as shown below:
+
+```
+{
+	“feedback”: {
+		“<feedback_1>”: {
+		        "locale_1": “<div>...</div>”,
+			"locale_2": “<div>...</div>”,
+			...
+		}
+
+		“<feedback_2>”: {
+		        "locale_1": “<div>...</div>”,
+			"locale_2": “<div>...</div>”,
+			...
+		},
+		… 
+	}
+}
+```
+
+#### Hints
+Hints are shown to the candidates after response processing or when the student requests for hints.
+- **HINT** outcome variable value is used to render the hint after response processing.
+- Alternatively, QuML players can provide an option for students to request for hints. Upon request, the QuML player renders all the configured hints in a sequence (as defined in the hints configuration).
+
+In either case, hints are shown only if they are allowed in the context where the question is being used. Hints is a JSON object in key-value format. The keys in the JSON are the identifiers of different hints for the question and values are HTML snippet for hints.
+
+Hints is a JSON object in key-value format. The keys in the JSON are the identifiers of different hints for the question and values are HTML snippet for hints. 
+
+Hints:
+
+```
+{
+	“hints”: {
+		“<hint_1>”: “<HTML>...</HTML>”,
+		“<hint_2>”: “<HTML>...</HTML>”
+		… 
+	}
+}
+```
+
+> Similar to feedback, internationalization is supported for hints also.
+
+#### Answers
+Providing exemplar answers for questions aid candidates in-depth learning and enhance candidate’s understanding of the concepts. These answers are mainly helpful for candidates in preparing for exams. Multiple answers can be configured for a question and each answer can have one or more parts, each part should be stored in HTML format. Similar to feedback & hints, answers in multiple locales can be specified.
+
+Answers:
+
+```
+{
+	“answers”: [
+	{
+		"parts": [{
+				"body": “<div>...</div>”,
+				"comment": "optional comment for the answer part"
+			},
+			{ ... }
+		]
+		“comment”: “optional comment for the answer”
+	},
+	{ ... }
+	]
+}
+```
+
+Answers for QuML questions are shown to the students in *solution* state of question session, and if the context in which the question is being used allows the students to view the solution.
 
 #### Template Declaration
-Template declarations declare variables that are to be used specifically for the purposes of cloning items. They can have their value set only during templateProcessing. They are referred to within the question body in order to individualize the clone and possibly also within the responseProcessing rules if the cloning process affects the way the question is scored.
+Question templates are templates that can be used for producing large numbers of similar questions. Such questions are often called cloned questions. Question templates can be used to produce a dynamically chosen clone at the start of a question session.
+
+Each question cloned from a template is identical except for the values given to a set of template variables. A question is therefore a question template if it contains **templateDeclaration** and a set of **templateProcessing** rules for assigning values for template variables. The value of the template variable is used to create an appropriate run of text that is displayed. When the question session starts, the template variable gets replaced with the value generated by template processing rule for the corresponding template variable.
+
+Template declarations declare variables that are to be used specifically for the purposes of cloning items. They can have their value set only during **templateProcessing**. They are referred to within the question body in order to individualize the clone and possibly also within the **responseProcessing** rules if the cloning process affects the way the question is scored. 
 
 Template declaration is a JSON object in key-value format. The keys in the JSON are the template variables used in the question and values are of type TemplateVariableDef. 
 
@@ -648,7 +691,11 @@ A question can have template variable that are not used in the question “body�
 ```
 
 #### Template Processing
-Template processing consists of one or more templateRules that are followed by the QML players in order to assign values to the template variables. Template processing is identical in form to responseProcessing except that the purpose is to assign values to template variables, not outcome variables, at the start of a question session.
+Template processing consists of one or more templateRules that are followed by the QuML players in order to assign values to the template variables. Template processing is identical in form to  responseProcessing except that the purpose is to assign values to template variables, not outcome variables, at the start of a question session.
+
+```
+Figure - The state diagram for template processing
+```
 
 Template processing is a JSON object in key-value format. The keys in the JSON are the template variables used in the question and values are of type TemplateProcessingDef. 
 
