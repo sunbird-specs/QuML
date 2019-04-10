@@ -1,24 +1,123 @@
-## Question Set Information Model
+## QuML for Tests
+Questions from the bank are pulled together to form a test. Selecting the questions requires a deep understanding of the subject and teaching process. For example, which concepts to cover in the test, how many questions should be picked, in what order? All of these have an impact on the design of a test. It is therefore a task that is generally done by the subject matter experts.
 
-### Table of contents
-1. [Question Set Data Model](#Question-Set-Data-Model)
-    1. [Instructions](#Instructions)
-	2. [i18n Variables](#i18n-Variables)
-	3. [i18n Data](#i18n-Data)
-	4. [Feedback](#Feedback)
-	5. [Hints](#Hints)
-	6. [Navigation Mode](#Navigation-Mode)
-	7. [Time Limits](#Time-Limits)
-	8. [Show Hints](#Show-Hints)
-	9. [Instructions](#Instructions)
-	10. [Outcome Declaration](#Outcome-Declaration)
-	11. [Outcome Processing](#Outcome-Processing)
-		1. [Custom Outcome Processing](#Custom-Outcome-Processing)
-		2. [Outcome Processing Templates](#Outcome-Processing-Templates)
-	12. [Questions](#Questions)
-	13. [Question Sets](#Question-Sets)
-2. [Question Set Metadata](#question-set-metadata)
-3. [Usage Data and Results Reporting](#Usage-Data-and-Results-Reporting)
+### Conceptual Model
+
+At the simplest level, a test is a collection of pre-selected questions, carefully arranged
+in an order. The issue with such tests is that they are static, and multiple attempts
+become rote.
+
+> ### In reality, tests need to be a lot more dynamic so that new questions, in random order are presented to the student. Even if the same student attempts the test multiple times, he/she is presented with a different set of questions during each attempt.
+
+In addition to explicitly adding questions to a test, the test can also be created using a
+dynamic criteria/query - so that all questions in the question bank that match that
+criteria become candidates for inclusion in the test. Each such criteria is nothing but a
+set of questions as defined in the underlying question bank.
+
+A test therefore is a group of such question sets and questions with an associated set of
+rules that determine which of the questions the student sees, in what order, and in
+what way the student interacts with them. The rules describe the valid paths through
+the test, when responses are submitted for response processing and when (if at all)
+feedback is to be given.
+
+```
+Figure - Test/Question Set and Questions
+```
+
+> “In the example shown above, the test has  5  questions that match the criteria defined in the first set. Let’s say the question bank has  20  questions that are “easy” difficulty level, and related to the concept of “Inertia”. Therefore, at runtime, when a test is being constructed, ANY 5 from the available 20 can be selected.”
+
+Modeling the tests (Question Sets) like this maintains a ​Balance of the questions in the
+test, ensure that even though questions are picked at random for different students,
+they all still get questions that are similar but not necessarily identical (in this case
+they all get Easy questions) - ensuring ​fairness​ of the assessment.
+
+A test (represented using question set in QuML) must contain at least one other
+question set or question. Question sets enable the following capabilities:
+
+#### ➢ Divide test into parts that could be undertaken in separate test sessions or a single test session
+
+#### ➢ Establish groups of questions that have some common pedagogic testing objective
+
+#### ➢ Collect together questions which will then be presented to the student. The order of presentation can be controlled using selection and ordering algorithms
+
+The below figure shows an overview of different components and actors involved in
+tests creation and delivery.
+
+```
+Figure: Overall system view for Tests
+```
+
+Similar to questions, teachers and students interact with question sets via QuML
+players. QuML players are responsible for managing test sessions.
+
+For each test session, question sets are selected and arranged into order according to
+rules defined in the containing question set. This process of selection and ordering
+defines a basic structure for each part of the test on a per-session basis. The paths that
+a student may take through this structure are then controlled by the mode settings for
+the question set and possibly by further preConditions or branchRules evaluated during
+the test session itself.
+
+```
+Figure - Structure of the test with question sets and questions
+```
+
+The below figure illustrates a specific instance of the same question set after the
+application of selection and ordering rules. A rule in question set S 01  selects just one of
+S 01 A and S 01 B, a rule in S 02  shuffles the order of the items contained by it and, finally,
+rules in S 03 select 1 out of the 2 items it contains and shuffles the result.
+
+```
+Figure - Delivered test after selection and ordering
+```
+
+#### Navigation mode
+
+This specification defines a way in which the overall behaviour of a question set can be
+controlled: the **navigation mode**. The navigation mode determines the general paths
+that the student may take.
+
+A question set in linear mode restricts the student to attempt each question in turn.
+Once the student moves on they are not permitted to return. A question set in
+nonlinear mode removes this restriction - the student is free to navigate to any
+question in the question set at any time. Navigation mode is applicable only to
+question sets that have questions as members and not other question sets. QuML
+players are free to implement their own user interface elements to facilitate navigation
+provided they honour the navigation mode currently in effect.
+
+#### Pre-conditions and Branching
+
+These are advanced concepts used to introduce an element of adaptivity into the
+specification of a test. Pre-conditions enable some question sets to be skipped
+depending on the outcomes of some of the question sets presented earlier in the test.
+
+
+A branch rule is a simple expression attached to a question set that is evaluated after
+the question set has been presented to the student. If the expression evaluates to true
+the test jumps forward to the question set referred to by the target identifier or exit the
+test.
+
+An implication with branch rules is that this configuration might result in cyclic loops
+some times. Though this can be used in drill and practice use cases, QuML players
+should not allow unbounded repetition. The player should exit the test after a certain
+number of repetitions.
+
+#### Time Limits
+
+In the context of a test, a question or a question set, may be subject to a time
+constraint. This specification supports both minimum and maximum time constraints.
+The controlled time for a single question is simply the duration of the question session
+as defined by the built-in response variable *duration*. For question sets, the time limits
+relate to the duration of all the question sessions plus any other time spent navigating
+the question set. In other words, the time includes time spent in states where no
+question is being interacted with, such as dedicated navigation screens.
+
+QuML players are required to track and report the time spent on each question set
+when time limits are in force. If no time limit is in force for a question set, then the
+time spent may be tracked and reported but it is not required.
+
+The time spent on the question set is recorded using a built-in response variable called
+*duration*. The values of these durations can be referred to during **outcomeProcessing**
+by using the variable name ​duration​.
 
 ### Question Set Data Model
 
