@@ -12,7 +12,7 @@ This specification is based on [IMS QTI Specification 2.2](http://www.imsglobal.
 - [**QuML for Tests**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/questionSet.md): The reference guide to the data model for question sets, which are used to represent tests.
 - [**Library Methods**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/methods.md): The reference guide to methods to be implemented by QuML implementations.
 - [**Telemetry**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/telemetry.md): The reference guide to track usage, and report results.
-- [**Appendix**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/appendix.md): Additional information and possibilities enabled by QuML.
+- [**Appendix**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/appendix.md): Appendix information for the specification.
 - [**Samples**](https://github.com/sunbird-specs/inQuiry/tree/master/v1/samples): This folder has sample questions and question sets represented using QuML.
 
 
