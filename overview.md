@@ -32,7 +32,7 @@ assessments. Presenting questions from a question bank has many advantages. Firs
 it can ensure that questions are always fresh, do not become stale and repetitive and
 the questions can evolve in their precision of measuring the student’s proficiency.
 
-![Summative & Formative Assessments](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Assessment_Types.png)
+![Summative & Formative Assessments](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Summative_Formative_Assessments.png)
 
 ```
 Figure: Summative and Formative Assessments
