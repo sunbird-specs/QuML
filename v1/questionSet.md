@@ -20,6 +20,8 @@ what way the student interacts with them. The rules describe the valid paths thr
 the test, when responses are submitted for response processing and when (if at all)
 feedback is to be given.
 
+![Sample test](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/QuestionSet_sample_test.png)
+
 ```
 Figure - Test/Question Set and Questions
 ```
@@ -43,6 +45,8 @@ question set or question. Question sets enable the following capabilities:
 The below figure shows an overview of different components and actors involved in
 tests creation and delivery.
 
+![Question Set systems view](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/QuestionSet_system_view.png)
+
 ```
 Figure: Overall system view for Tests
 ```
@@ -57,6 +61,8 @@ a student may take through this structure are then controlled by the mode settin
 the question set and possibly by further preConditions or branchRules evaluated during
 the test session itself.
 
+![Question set structure](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Set_Structure_1.png)
+
 ```
 Figure - Structure of the test with question sets and questions
 ```
@@ -65,6 +71,8 @@ The below figure illustrates a specific instance of the same question set after 
 application of selection and ordering rules. A rule in question set S 01  selects just one of
 S 01 A and S 01 B, a rule in S 02  shuffles the order of the items contained by it and, finally,
 rules in S 03 select 1 out of the 2 items it contains and shuffles the result.
+
+![Question set materialised](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Set_Structure_2.png)
 
 ```
 Figure - Delivered test after selection and ordering
@@ -121,15 +129,7 @@ by using the variable name ​duration​.
 
 ### Question Set Data Model
 
-A test is a group of question sets and questions with an associated set of rules that determine which of the questions the candidate sees, in what order, and in what way the candidate interacts with them. The rules describe the valid paths through the test, when responses are submitted for response processing and when (if at all) feedback is to be given. Tests are represented using Question Sets in QML.
-
-For each test session, question sets are selected and arranged into order according to rules defined in the containing question set. This process of selection and ordering defines a basic structure for each part of the test on a per-session basis. The paths that a student may take through this structure are then controlled by the mode settings for the question set and possibly by further preConditions or branchRules evaluated during the test session itself. 
-
-![Question set](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Set_Structure_1.png)
-
-The below figure illustrates a specific instance of the same question set after the application of selection and ordering rules. A rule in question set S01 selects just one of S01A and S01B, a rule in S02 shuffles the order of the items contained by it and, finally, rules in S03 select 1 out of the 2 items it contains and shuffles the result.
-
-![Question set 2](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Set_Structure_2.png)
+This section describes the data model of a question set. Question set data is used by QuML players while rendering a question set. In case when the question set is added to another question set, then the settings of the containing question set will override the configurations of the contained question set.
 
 #### Instructions
 Instructions for the question set can be defined in HTML format (similar to question instructions). Instructions can contain i18n variables to support internationalization.
