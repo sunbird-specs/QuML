@@ -354,3 +354,36 @@ Outcome processing schema for using outcome processing templates:
 
 ### Question Set Metadata
 
+Similar to question metadata, question set metadata should also capture enough detail that is needed for discovering, delivering and composing question sets into tests.
+
+#### questionSetType
+A question set can be comprised of a materialized list of questions, or can also be dynamically built at runtime by using a criteria to select member questions. A set can be either - *materialized* or *dynamic*. 
+
+#### criteria
+Criteria to be used when the set type is dynamic . Criteria should be provided in JSON map format where key should be a metadata field of question and value should be either a single value or list of values.
+
+```
+{
+    “<metadata_field_1>”: <value>, 
+    “<metadata_field_2>”: [ <value>, <value>, ... ], 
+    ...
+}
+```
+
+#### usedFor
+A question set can be used either for formative or summative assessments. A question set tagged for usage in summative assessment should not be used in formative assessment. Allowed values for this field are -  *practice* (formative assessments) or *exam* (summative assessments).
+
+#### purpose
+This metadata field should be used to tag the purpose served by the question set - *recall, explore, sense, assess, teach, revise*.
+
+#### visibility
+Some question sets can be made available only for those who created it and/or for some specific systems or use cases. Also, a question set could be created to be used only within one test and others cannot use it. This metadata can be used to tag the question set visibility -  *private, public or parent*. 
+
+#### version
+Version of the QuML specification using which the question set is created.
+
+#### members
+List of questions or question set identifiers that are added to the question set.
+
+#### Curricular Metadata
+This is a group of metadata fields to capture the pedagogic intent of the question set - which concepts are tested by the question set, etc. The metadata fields in this category vary for each domain. For example, questions of K-12 domain will have the following curricular metadata fields:  *board, grade, subject, medium and topics*. 
