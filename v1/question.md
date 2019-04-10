@@ -312,7 +312,7 @@ The map interaction is a graphic interaction. The candidate’s task is to selec
 The custom interaction provides an opportunity for extensibility of this specification to include support for interactions not currently documented. QuML implementations can implement a set of custom interactions that go beyond the standard interactions described above. Authors wishing to write questions for those implementations can use these custom interactions. However these custom templates should be published to ensure that these questions can be used with QuML players of other implementations. Otherwise, such questions will be limited to use only by that implementation.
 
 #### CSS classes
-QML recommends the use of Cascading Style Sheets (CSS) for controlling the content formatting. QML has a defined set of standard classes for various different elements and interactions. A question can use those classes for formatting and QuML players should provide implementation for these classes.
+QuML recommends the use of Cascading Style Sheets (CSS) for controlling the content formatting. QuML has a defined set of standard classes for various different elements and interactions. A question can use those classes for formatting and QuML players should provide implementation for these classes.
 
 - *1-col-layout*: style to create a one column layout
 - *2-col-layout*: style to create a two column layout
@@ -490,7 +490,7 @@ Custom response processing involves the application of a set of response rules, 
 
 To alleviate this problem, the implementation of generalized response processing is an optional feature. Players that do not support it can instead implement a smaller number of standard response processors called response processing templates. These templates are also defined using javascript for evaluation of logic and should be implemented by the QuML implementation. 
 
-Following are two standard response processing templates defined in QML (an additional template for response processing using templates is defined in the Template Processing section):
+Following are two standard response processing templates defined in QuML (an additional template for response processing using templates is defined in the Template Processing section):
 
 **MATCH_CORRECT**
 
@@ -868,7 +868,7 @@ This category of metadata contains pedagogic information of the question - how d
 This category of metadata contains information that can be used by delivery engines to deliver the question. Some of the metadata fields of this category can be automatically derived and set by the creation tools, e.g.: mime type. 
 
 - *mimeType*: mime type of the question - HTML is the only supported mime type in this version of the specification.
-- *version*: version of the QML specification using which the question is created.
+- *version*: version of the QuML specification using which the question is created.
 - *questionType*: one of the standard question types - mcq, mtf, ftb, mmcq, essay, short answers, programming, other. this can be auto-derived at times based on the interactions used in the question.
 - *visibility*: if the question is visible for all or only for those who created it and/or for some specific systems or use cases - private, public.
 - *isTemplate*: set to true if question data has template variables and template processing, else it is set to false.
