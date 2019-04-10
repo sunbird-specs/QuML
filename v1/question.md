@@ -1,41 +1,109 @@
 ## Question Information Model
 
+Digital assessments become easier with a standard format for the exchange of
+questions and structures, scoring information, the ability to analyze results, and ways
+to accommodate students’ personal needs and preferences. Digital assessments are
+especially important at a time when most institutions are looking to eliminate or
+greatly reduce the use of paper in classrooms within the next few years. QuML
+specification for questions defines a standard format that enables interoperability of
+questions and digital assessments.
+
 This document has the following sections:
 
-1. Question Data Model - the core that defines the actual question data exchange (including the content itself)
-2. Question Metadata - QML specific metadata
-3. Usage data and Results Reporting - statistical data about the usage and reporting of the results assigned by outcomes and response processing of the question
+1. Anatomy of a Question - the structure and composition of a QuML question
+2. Conceptual Model - a conceptual model of the actors and components related to QuML quetions
+3. Question Data Model - the core that defines the actual question data exchange (including the content itself)
+4. Question Metadata - QuML specific metadata
 
-### Table of contents
-1. [Question Data Model](#Question-Data-Model)
-    1. [Body](#Body)
-	2. [Interactions](#Interactions)
-	3. [Response Variables](#Response-Variables)
-	4. [Asset Variables](#Asset-Variables)
-	5. [i18n Variables](#i18n-Variables)
-	6. [Template Variables](#Template-Variables)
-	7. [Outcome Variables](#Outcome-Variables)
-	8. [CSS classes](#CSS-classes)
-	9. [Instructions](#Instructions)
-	10. [i18n Data](#i18n-Data)
-	11. [Asset Declaration](#Asset-Declaration)
-	12. [Response Declaration](#Response-Declaration)
-	13. [Outcome Declaration](#Outcome-Declaration)
-	14. [Feedback](#Feedback)
-	15. [Hints](#Hints)
-	16. [Answers](#Answers)
-	17. [Response Processing](#Response-Processing)
-		1. [Custom Response Processing](#Custom-Response-Processing)
-		2. [Response Processing Templates](#Response-Processing-Templates)
-	18. [Template Declaration](#Template-Declaration)
-	19. [Template Processing](#Template-Processing)
-		1. [Using Template Variables in Response Processing](#Using-Template-Variables-in-Response-Processing)
-2. [Question Metadata](#question-metadata)
-    1. [Learning Metadata](#Learning-Metadata)
-	2. [Technical Metadata](#Technical-Metadata)
-	3. [Curricular Metadata](#Curricular-Metadata)
-	4. [Usage Metadata](#Usage-Metadata)
-3. [Usage Data and Results Reporting](#Usage-Data-and-Results-Reporting)
+### Anatomy of a Question
+
+Traditionally, questions are monolithic in nature and are used like black boxes. Such
+questions are primarily used for only one purpose - getting a score when a user
+interacts with the question. There is no (or very little) knowledge of what the question
+consists of, what is the purpose and for whom it is intended for. This limits the re-use
+of questions in different scenarios and also by different systems.
+
+```
+Figure: Questions used only for SCORE output (black box model)
+```
+
+QuML introduces a model where a question incorporates the information that defines
+the question, information that is presented to a student, instructions of how to present
+to the student & instructions of how to score the question. For example, in QuML,
+every interaction of student with the question gets captured as response variables and
+scoring takes place when student responses are transformed into outcomes by response
+processing rules. The response processing rules and the response variables are well
+defined entities in QuML.
+
+> ### In QuML, question is a first class citizen. It can be used for different purposes, and in different forms, mainly due to its modular structure.
+
+There are multiple components in a QuML question. These components can be broadly
+classified into four categories.
+
+#### ➢ Content​: The content category comprises of the data that is needed to render and process the question. It includes labels & texts, responses and outcomes of the question.
+
+#### ➢ Appearance​: This category comprises of the sections that define the user experience of the question. It includes the HTML markup and styles to format the question.
+
+#### ➢ Behaviour​: This category comprises of the processing logic for assigning values to template variables and evaluating the student’s responses.
+
+#### ➢ Metadata​: This category comprises of the data that is needed to search, discover and compose questions into tests.
+
+```
+Figure: Anatomy of a QuML Question
+```
+
+Since a QuML question is not monolithic in nature and has a well-defined structure, a
+question can be deconstructed and used for different purposes. For example, a testing
+system can get questions which are tagged for “exam” purpose and render them
+without feedback or hints to the student. And another e-learning system can get
+questions, from the same repository, which are tagged for “practice” purpose and
+render them with feedback and hints enabled.
+
+### Conceptual Model
+
+The below figure shows an overview of different components and actors involved in the
+questions creation and delivery.
+
+```
+Figure: Overall system view for Questions
+```
+
+Question Bank is a repository of QuML questions. Authoring tools are used by authors
+to create questions which get stored in the question bank. Learning and Assessment
+systems are responsible for presenting the questions to teachers and/or students
+depending on the context where the question is being used. Teachers and students interact with questions via QuML players. QuML players are responsible for managing the question sessions.
+
+A question session is the accumulation of all the attempts at a particular instance of a
+question made by a student. In some types of tests, the same question may be
+presented to the candidate multiple times e.g. during ‘drill and practice’. Each
+occurrence or instance of the question is associated with its own question session. The
+following figure illustrates the user-perceived states of the question session.
+
+```
+Figure: The life cycle of a question session
+```
+
+Not all states will apply to every scenario, for example feedback may not be provided
+for a question or it may not be allowed in the context in which the question is being
+used. Similarly, the student may not be permitted to review their responses and/or view
+the solution.
+
+As mentioned earlier, a QuML question comprises of multiple components with a
+well-defined structure. Each component of the question comes into play at different
+states of a question session. QuML implementations (players) use these components
+and perform the required action in-between state transitions. The below figure shows
+the actions performed by QuML players in between states of a question session.
+
+```
+Figure: Processes in a question session
+```
+
+For example, body along with style sheet data is used to present the question to the
+student before entering ​interacting state. User responses are captured and set during
+interacting state. User’s responses are processed and outcomes are set before moving
+into ​finished state. Finally, QuML players generate telemetry events (explained later)
+that capture details of all user interactions with the question, including the user’s
+responses to the question.
 
 ### Question Data Model
 
@@ -771,4 +839,3 @@ This category of metadata captures the statistical data about the usage of a que
 - *avgRating*: average rating of the question.
 - *totalRatings*: total number of ratings given for the question.
 
-### Usage Data and Results Reporting
