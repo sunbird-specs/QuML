@@ -68,8 +68,9 @@ Asset data type should be used for representing a media asset which can be used 
 | Attribute | Schema | Description |
 | -- | ------ | --------- |
 | name | dataType: *string*, <br/> required: *true* | name of the asset |
-| mainMedia | dataType: *media*, <br/> required: *true* | main media object for the asset |
-| media | dataType: *list of media objects*, required: *false* | list of alternate media for the asset |
+| media | dataType: *media*, <br/> required: *true* | main media object for the asset |
+| variants | dataType: *list of media objects*, required: *false* | list of alternate media for the asset |
+| mediaType | dataType: *string*, required: *true* | type of the asset. this should be auto-derived from the mimeType value of the media, current supported types are image, audio and video |
 | icon | dataType: *media*, required: *false* | icon for the asset |
 | thumbnails | dataType: *list of media objects*, required: *false* | list of thumbnails for the asset |
 | posterImage | dataType: *media object*, required: *false* | poster image for the asset |
