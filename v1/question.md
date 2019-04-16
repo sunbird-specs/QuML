@@ -10,10 +10,10 @@ questions and digital assessments.
 
 This document has the following sections:
 
-1. Anatomy of a Question - the structure and composition of a QuML question
-2. Conceptual Model - a conceptual model of the actors and components related to QuML quetions
-3. Question Data Model - the core that defines the actual question data exchange (including the content itself)
-4. Question Metadata - QuML specific metadata
+1. [Anatomy of a Question](#anatomy-of-a-question) - the structure and composition of a QuML question
+2. [Conceptual Model](#conceptual-model) - a conceptual model of the actors and components related to QuML quetions
+3. [Question Data Model](#question-data-model) - the core that defines the actual question data exchange (including the content itself)
+4. [Question Metadata](#question-metadata) - QuML specific metadata
 
 ### Anatomy of a Question
 
@@ -152,6 +152,18 @@ There are two built-in response variables: 'numAttempts' and 'duration'. These a
 
 - **numAttempts**: An integer that records the number of attempts at each question the candidate has taken (if multiple attempts are allowed in the context where the question is being used). The value defaults to 0 initially and then increases by 1 at the start of each attempt.
 - **duration**: A float that records the accumulated time (in seconds) of all candidate sessions for all attempts. In other words, the time between the beginning and the end of the question session minus any time the session was in the suspended state. 
+
+**Asset Variables**
+
+Asset variables are used to load assets during the rendering of a question. Values for asset variables refer to an asset in the QuML repository server. Asset variables can be used in a question using the html data attribute: **“data-asset-variable”**. This data attribute should be set on HTML elements that are used for rendering assets (e.g. img, audio and video elements). And when the question is being rendered, the location of the asset object represented by the asset variable is set as the source of the HTML element on which the asset variable is declared. All the assets used in a question are declared in Asset Declaration. This declaration is needed to package and pre-download the question assets for offline usage.
+
+```
+<img src="https://cdn.quml_repo01.com/assets/apple.png" data-asset-variable="asset_01" >
+```
+
+Optionally, a default source can also be provided for the HTML elements. If an asset variable is not declared, the default value of the source will be used by the QuML players.
+
+*QuML implementations should upload assets to the QuML repository server at the time of creation. QuML players should use absolute path of the asset during online usage of the question and in case of offline usage, the asset should be pre-downloaded to the device/system where the question is being used.*
 
 **Template Variables**
 
@@ -416,6 +428,23 @@ Each response variable should have exactly one response variable definition in t
 | --- | ----- | ----------- |
 | key | dataType: points, required: true |  |
 | value | dataType: float, required: true |  |
+
+#### Asset Declaration
+
+A **“assetDeclaration”** contains information about the assets used in the question. Asset Declaration should have declaration for every asset used in the question across body, feedback, instructions, hints and answers.
+
+Asset declaration is a JSON object in key-value format. The keys in the JSON are the asset variables defined in the question and values are of type *[Asset](https://github.com/sunbird-specs/inQuiry/blob/master/v1/common.md#asset)*.
+
+AssetDeclaration:
+```
+{
+	“assetDeclaration”: {
+		“<asset_variable_1>”: Asset Object,
+		“<asset_variable_2>”: Asset Object,
+		… 
+	}
+}
+```
 
 #### Outcome Declaration
 An “outcomeDeclaration” contains information about the outcome variables of the question, i.e the values that are output of a question session. QuML players should make the outcome variables available to the context in which the question is being used. For example, a test session uses the values of outcome variables of constituent questions to process the outcome of the test.
