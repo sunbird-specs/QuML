@@ -9,7 +9,9 @@ This specification is based on [IMS QTI Specification 2.2](http://www.imsglobal.
 - [**Overview**](https://github.com/sunbird-specs/inQuiry/blob/master/overview.md): Importance of questions in learning and the need for a specification like QuML.
 - [**Common Elements**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/common.md): The reference guide to the data model of common elements used in this specification.
 - [**QuML for Questions**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/question.md): The reference guide to the data model for questions. The document provides detailed information about the model and specifies the requirements of delivery engines and authoring systems.
+- [**Question Schema**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/question-schema.json): JSON schema for QuML questions.
 - [**QuML for Tests**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/questionSet.md): The reference guide to the data model for question sets, which are used to represent tests.
+- [**Test Schema**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/question-set-schema.json): JSON schema for QuML tests.
 - [**Library Methods**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/methods.md): The reference guide to methods to be implemented by QuML implementations.
 - [**Telemetry**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/telemetry.md): The reference guide to track usage, and report results.
 - [**Appendix**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/appendix.md): Additional information and references.
