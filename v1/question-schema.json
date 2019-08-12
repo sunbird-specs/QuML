@@ -1,0 +1,538 @@
+{
+    "$id": "https://github.com/sunbird-specs/inQuiry/blob/master/v1/question-schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Question",
+    "type": "object",
+    "required": ["body"],
+    "properties": {
+        "body": {
+            "description": "Body contains the text, graphics, media objects and interactions that describe the question’s content.",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "Question body as HTML string when the question is used in only one language."
+                },
+                { "$ref": "#/definitions/i18nData" }
+            ]
+        },
+        "instructions": {
+            "description": "Instructions on how to understand, attempt or how the question will be evaluated.",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "Instructions as HTML string when the question is used in only one language."
+                },
+                { "$ref": "#/definitions/i18nData" }
+            ]
+        },
+        "feedback": {
+            "description": "Feedback shown to the students after response processing.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [ "id", "body" ],
+                "properties": {
+                    "id": {
+                        "description": "Identifier of the feedback object.",
+                        "type": "string"
+                    },
+                    "body": {
+                        "description": "Body of the feedback to be rendered for the specified feedback identifier.",
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "description": "Feedback as HTML string when the question is used in only one language."
+                            },
+                            { "$ref": "#/definitions/i18nData" }
+                        ]
+                    }
+                }
+            }
+        },
+        "hints": {
+            "description": "Hints are shown to the students after response processing or when the student requests for hints.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [ "id", "body" ],
+                "properties": {
+                    "id": {
+                        "description": "Identifier of the hint object.",
+                        "type": "string"
+                    },
+                    "body": {
+                        "description": "Body of the hint to be rendered for the specified hint identifier.",
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "description": "Hint as HTML string when the question is used in only one language."
+                            },
+                            { "$ref": "#/definitions/i18nData" }
+                        ]
+                    }
+                }
+            }
+        },
+        "solutions": {
+            "description": "Solutions to the question.",
+            "oneOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of solutions without association to any specific language",
+                    "minItems": 1
+                },
+                {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/i18nData" },
+                    "description": "Solutions in different languages for multi-lingual questions.",
+                    "minItems": 1
+                }
+            ]
+        },
+        "media": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/media" },
+            "description": "List of media used in the question"
+        },
+        "responseDeclaration": {
+            "description": "Information about answer to the question, when it is correct and optionally, how it is scored.",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/responseVariableDef"
+            }
+        },
+        "outcomeDeclaration": {
+            "description": "Information about the outcome variables of the question, i.e the values that are output of a question session.",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/outcomeVariableDef"
+            }
+        },
+        "templateDeclaration": {
+            "description": "Declaration of template variables that are to used for the purposes of cloning questions, i.e. auto-generating different sets of values for variables in the question.",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/templateVariableDef"
+            }
+
+        },
+        "templateProcessing": {
+            "description": "One or more template rules to assign values to the template variables.",
+            "type": "object",
+            "additionalProperties": { "$ref": "#/definitions/templateProcessingDef" }
+        },
+        "responseProcessing": {
+            "description": "Rules to assign values to outcome variables based on the student's reponses.",
+            "type": "object",
+            "oneOf": [
+                {
+                    "required": ["eval"],
+                    "properties": {
+                        "eval": {
+                            "type": "string",
+                            "description": "Custom response processing logic using javascript."
+                        }
+                    },
+                    "$comment": "custom 'eval' data is mandatory if response processing templates are not used for the question."
+                },
+                {
+                    "required": ["template"],
+                    "properties": {
+                        "template": {
+                            "enum": ["MATCH_CORRECT", "MAP_RESPONSE", "MATCH_TEMPLATE"]
+                        },
+                        "mappingConfig": { 
+                            "type": "array",
+                            "items": {"$ref": "#/definitions/mappingConfigDef"}
+                        },
+                        "matchTemplateConfig": { 
+                            "type": "array",
+                            "items": {"$ref": "#/definitions/matchTemplateConfigDef"}
+                        }
+                    },
+                    "allOf": [
+                        {
+                            "if": { "properties": {"template": {"const": "MAP_RESPONSE"}} },
+                            "then": {"required": ["mappingConfig"]}
+                        },
+                        {
+                            "if": { "properties": {"template": {"const": "MATCH_TEMPLATE"}} },
+                            "then": {"required": ["matchTemplateConfig"]}
+                        }
+                    ]
+                }
+            ]
+        },
+        "bloomsLevel": {
+            "type": "array",
+            "enum": [""],
+            "description": "Cognitive processes involved to answer the question."
+        },
+        "qlevel": {
+            "type": "array",
+            "enum": ["EASY", "MEDIUM", "HARD"],
+            "description": "Difficulty level of the question."
+        },
+        "purpose": {
+            "type": "string",
+            "enum": ["recall", "explore", "sense", "assess", "teach", "revise"],
+            "description": "Purpose served by the question."
+        },
+        "expectedDuration": {
+            "type": "number",
+            "description": "Expected time for one attempt of the question."
+        },
+        "maxScore": {
+            "type": "number",
+            "description": "Maximum score that can be awarded for the question."
+        },
+        "type": {
+            "type": "string",
+            "description": "One of the standard question types - mcq, mtf, ftb, mmcq, essay, short answers, programming, other. this can be auto-derived based on the interactions used in the question."
+        },
+        "visibility": {
+            "type": "string",
+            "enum": ["public", "private"],
+            "description": "If the question is visible for all or only for those who created it and/or for some specific systems or use cases."
+        },
+        "isTemplate": {
+            "type": "boolean",
+            "description": "Set to true if question data has template variables and template processing, else it is set to false."
+        },
+        "interactions": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "List of interactions present in the question."
+        },
+        "solutionAvailable": {
+            "type": "boolean",
+            "description": "true, if question data has solutions, else, set to false"
+        },
+        "scoringMode": {
+            "type": "string",
+            "enum": ["responseProcessing", "offline", "external"],
+            "description": "One of the values: responseProcessing (if question has inbuild response processing), offline (if scoring will be done offline and/or manually) or external (if an external system does the evaluation and submit the score)."
+        },
+        "qumlVersion": {
+            "type": "string",
+            "const": "0.5",
+            "description": "Version of the QuML specification using which the question is created."
+        },
+        "totalTimeSpent": {
+            "type": "number",
+            "description": "Total cumulative time spent, in milliseconds, on the question by all users."
+        },
+        "avgTimeSpent": {
+            "type": "number",
+            "description": "Average time spent per attempt, in milliseconds."
+        },
+        "numAttempts": {
+            "type": "number",
+            "description": "total number of attempts."
+        },
+        "numCorrectAttempts": {
+            "type": "number",
+            "description": "Number of attempts where the user response is correct."
+        },
+        "numInCorrectAttempts": {
+            "type": "number",
+            "description": "Number of attempts where the user response is in-correct."
+        },
+        "numSkips": {
+            "type": "number",
+            "description": "Total number of attempts where the user did not give a response."
+        },
+        "avgRating": {
+            "type": "number",
+            "description": "Average rating of the question."
+        },
+        "totalRatings": {
+            "type": "number",
+            "description": "Total number of ratings given for the question."
+        }
+    },
+    "additionalProperties": true,
+    "definitions": {
+        "cardinality": {
+            "enum": ["single", "multiple", "ordered"]
+        },
+        "type": {
+            "enum": ["string", "integer", "float", "boolean", "map", "uri", "points", "coordinate"]
+        },
+        "coordinate": {
+            "type": "object",
+            "required": ["x", "y"],
+            "properties": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+            },
+            "additionalProperties": false
+        },
+        "points": {
+            "type": "object",
+            "required": ["shape", "coordinates"],
+            "properties": {
+                "shape": {"enum": ["point", "circle", "ellipse", "poly", "rect"]},
+                "coordinates": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/coordinateDef" }
+                }
+            },
+            "additionalProperties": false
+        },
+        "media": {
+            "type": "object",
+            "required": ["id", "mediaType", "src"],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "mimeType": {
+                    "enum": ["image/png", "audio/mp3", "video/mp4", "video/webm"]
+                },
+                "mediaType": {
+                    "enum": ["image", "audio", "video"]
+                },
+                "src": {
+                    "type": "string"
+                },
+                "baseUrl": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "anyTypeDef": {
+            "oneOf": [
+                {"type": ["string", "number", "integer", "boolean", "object", "array"]},
+                {"$ref": "#/definitions/points"},
+                {"$ref": "#/definitions/media"}
+            ]
+        },
+        "i18nData": {
+            "type": "object",
+            "description": "i18n data in map format, where key is the ISO language code and value is string data in the the specified language.",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "responseVariableDef": {
+            "type": "object",
+            "required": ["cardinality", "type"],
+            "properties": {
+                "cardinality": {"$ref": "#/definitions/cardinality"},
+                "type": {"$ref": "#/definitions/type"},
+                "correctResponse": {"$ref": "#/definitions/correctResponseDef"},
+                "mapping": {"$ref": "#/definitions/mappingDef"},
+                "areaMapping": {"$ref": "#/definitions/areaMappingDef"}
+            },
+            "additionalProperties": false
+        },
+        "correctResponseDef": {
+            "type": "object",
+            "required": ["value"],
+            "properties": {
+                "value": {
+                    "$ref": "#/definitions/anyTypeDef"
+                }
+            },
+            "additionalProperties": false
+        },
+        "mappingDef": {
+            "type": "object",
+            "required": ["key", "value"],
+            "properties": {
+                "key": {"$ref": "#/definitions/anyTypeDef"},
+                "value": {"type": "number"},
+                "caseSensitive": {"type": "boolean", "default": false}
+            },
+            "additionalProperties": false
+        },
+        "areaMappingDef": {
+            "type": "object",
+            "required": ["key", "value"],
+            "properties": {
+                "key": {"$ref": "#/definitions/points"},
+                "value": {"type": "number"}
+            },
+            "additionalProperties": false
+        },
+        "outcomeVariableDef": {
+            "type": "object",
+            "required": ["cardinality", "type"],
+            "properties": {
+                "cardinality": {"$ref": "#/definitions/cardinality"},
+                "type": {"$ref": "#/definitions/type"},
+                "defaultValue": {"$ref": "#/definitions/anyTypeDef"},
+                "range": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/anyTypeDef"}
+                }
+            },
+            "additionalProperties": false
+        },
+        "templateVariableDef": {
+            "type": "object",
+            "required": ["cardinality", "type"],
+            "properties": {
+                "cardinality": {"$ref": "#/definitions/cardinality"},
+                "type": {"$ref": "#/definitions/type"},
+                "defaultValue": {"$ref": "#/definitions/anyTypeDef"}
+            },
+            "additionalProperties": false
+        },
+        "templateProcessingDef": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/templateProcessingRuleDef"
+            },
+            "minItems": 1
+        },
+        "templateProcessingRuleDef": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "random": {"$ref": "#/definitions/randomVariableDef"},
+                        "language": {"type": "string", "description": "ISO Language code"}
+                    }
+                },
+                {
+                    "properties": {
+                        "regex": {"type": "string"},
+                        "language": {"type": "string", "description": "ISO Language code"}
+                    }
+                },
+                {
+                    "properties": {
+                        "eval": {"type": "string"},
+                        "language": {"type": "string", "description": "ISO Language code"}
+                    }
+                }
+            ],
+            "additionalProperties": false
+        },
+        "randomVariableDef": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "list": {
+                            "type": "array",
+                            "items": {"$ref": "#/definitions/anyTypeDef"}
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "number": {"$ref": "#/definitions/randomNumberDef"}
+                    }
+                }
+            ],
+            "additionalProperties": false
+        },
+        "randomNumberDef": {
+            "type": "object",
+            "required": ["type", "min", "max"],
+            "oneOf": [
+                {
+                    "properties": {
+                        "type": {"enum": ["integer"]},
+                        "min": {"type": "integer"},
+                        "max": {"type": "integer"},
+                        "step": {"type": "integer"}
+                    }
+                },
+                {
+                    "properties": {
+                        "type": {"enum": ["float"]},
+                        "min": {"type": "number"},
+                        "max": {"type": "number"},
+                        "step": {"type": "number"}
+                    }
+                }
+            ],
+            "additionalProperties": false
+        },
+        "mappingConfigDef": {
+            "type": "object",
+            "properties": {
+                "SCORE": {
+                    "type": "object",
+                    "oneOf": [
+                        {
+                            "patternProperties": {
+                                "^[g,l]e$": { "type": "number"},
+                                "^[g,l]t$": { "type": "number"},
+                                "^eq$": { "type": "number"},
+                                "^in$": { "type": "array", "items": {"type": "number"}}
+                            },
+                            "$comment": "Define the SCORE range using the operators: le (less than or equal to), lt (less than), eq (equals to), ge (greater than or equals to), gt (greater than) and in (in a list of values). e.g.: {“lt”: 1.0}."
+                        },
+                        {
+                            "required": ["regex"],
+                            "properties": {
+                                "regex": { "type": "string", "format": "regex" }
+                            },
+                            "$comment": "Alternatively, a regex expression can also be used to define the SCORE range."
+                        }
+                    ],
+                    "additionalProperties": false
+                },
+                "outcomeVariables": {
+                    "type": "object",
+                    "description": "List of outcome variables, defined in outcomeDeclaration, and the values to be set for them when the computed SCORE falls in the defined range.",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/anyTypeDef"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "matchTemplateConfigDef": {
+            "type": "object",
+            "required": ["mapping", "SCORE"],
+            "properties": {
+                "mapping": {
+                    "type": "object",
+                    "$comment": "A list of mapping conditions can be configured for reach response variable.",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/responseMappingDef"
+                        },
+                        "minItems": 1,
+                        "$comment": "AND operation is applied between multiple conditions of a response variable."
+                    }
+                },
+                "SCORE": { 
+                    "type": "number",
+                    "description": "SCORE value to be set when the specified mapping resolves to be true."
+                }
+            }
+        },
+        "responseMappingDef": {
+            "type": "object",
+            "required": ["operator", "templateVariables"],
+            "properties": {
+                "operator": {
+                    "type": "string",
+                    "enum": ["lt", "le", "eq", "ge", "gt", "in"],
+                    "description": "Operators: le (less than or equal to), lt (less than), eq (equals to), ge (greater than or equals to), gt (greater than) and in (in a list of values)."
+                },
+                "templateVariables": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "description": "One or more template variables can be specified for each operator. If more than one template variable is provided, an OR condition will be applied."
+                }
+            }
+        }
+    }
+  }
+  
