@@ -57,25 +57,9 @@ Media data type should be used for representing a single media file. Media are r
 
 | Attribute | Schema | Description |
 | -- | ------ | --------- |
-| name | dataType: *string*, <br/> required: *true* | name of the media object |
+| id | dataType: *string*, <br/> required: *true* | identifier of the media object |
 | mimeType | dataType: *string*, <br/> required: *true* | technical mime type of the asset used by QuML players to understand the format of the asset. Supported types are image/png, audio/mp3, video/mp4, and video/webm |
 | mediaType | dataType: *string*, required: *true* | type of the asset. this should be auto-derived from the mimeType value, current supported types are image, audio and video |
-| url | dataType: *string*, required: *true* | path of the media file. QuML players will use this value to load all the media used in a question/test |
-
-#### asset
-Asset data type should be used for representing a media asset which can be used in questions and/or tests. An asset is made up of multiple media, like variants of the same media file (mp4 vs webm, multiple resolutions of the same media file, etc), thumbnails, poster images, and icons. An asset contains all the information required to render a media.
-
-| Attribute | Schema | Description |
-| -- | ------ | --------- |
-| name | dataType: *string*, <br/> required: *true* | name of the asset |
-| media | dataType: *media*, <br/> required: *true* | main media object for the asset |
-| variants | dataType: *list of media objects*, required: *false* | list of alternate media for the asset |
-| mediaType | dataType: *string*, required: *true* | type of the asset. this should be auto-derived from the mimeType value of the media, current supported types are image, audio and video |
-| icon | dataType: *media*, required: *false* | icon for the asset |
-| thumbnails | dataType: *list of media objects*, required: *false* | list of thumbnails for the asset |
-| posterImage | dataType: *media object*, required: *false* | poster image for the asset |
-
-
-
-
+| src | dataType: *string*, required: *true* | path of the media file. QuML players will use this value to load all the media used in a question/test |
+| baseUrl | dataType: *string*, required: *false* | baseUrl of the server where the media is stored. Base URL can be used by QuML players to load media in a browser without CORS issues. this is achieved by QuML server proxying path to the provided base url. |
 
