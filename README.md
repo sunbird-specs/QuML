@@ -17,4 +17,9 @@ This specification is based on [IMS QTI Specification 2.2](http://www.imsglobal.
 - [**Appendix**](https://github.com/sunbird-specs/inQuiry/blob/master/v1/appendix.md): Additional information and references.
 - [**Samples**](https://github.com/sunbird-specs/inQuiry/tree/master/v1/samples): This folder has sample questions and question sets represented using QuML.
 
+## Implementation(s)
 
+The Sunbird [**knowledge-platform**](http://github.com/project-sunbird/knowledge-platform) using QuML Specification to enable Question and Quesion Set objects sourcing and consumption. Below is the current version of the schema defined to enable this.
+
+- [**Question Schema**](v1/schemas/question/1.0/schema.json)
+- [**Question Set Schema**](v1/schemas/questionset/1.0/schema.json)
