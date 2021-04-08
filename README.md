@@ -19,7 +19,7 @@ This specification is based on [IMS QTI Specification 2.2](http://www.imsglobal.
 
 ## Implementation(s)
 
-The Sunbird knowledge-platform using QuML Specification to enable Question and Quesion Set objects sourcing and consumption. Below is the current version of the schema defined to enable this.
+The Sunbird [**knowledge-platform**](http://github.com/project-sunbird/knowledge-platform) using QuML Specification to enable Question and Quesion Set objects sourcing and consumption. Below is the current version of the schema defined to enable this.
 
 - [**Question Schema**](v1/schemas/question/1.0/schema.json)
 - [**Question Set Schema**](v1/schemas/questionset/1.0/schema.json)
