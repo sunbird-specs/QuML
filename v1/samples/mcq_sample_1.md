@@ -1,19 +1,21 @@
+# mcq\_sample\_1
 
-This sample demonstrates how QuML is used to model a simple multiple choice question (with multiple answers), configure the interactions & process the responses to produce results.
+This sample demonstrates how QuML is used to model a simple multiple choice question \(with multiple answers\), configure the interactions & process the responses to produce results.
 
 ![sample mcq image](https://github.com/sunbird-specs/qml/blob/master/v1/images/sample_question_mcq_1.png)
 
 This question is a multiple choice question where the correct answer has two values - “Hydrogen” and “Oxygen”. Below is the logic for evaluating and processing the question:
-- If student selects both the correct answers, the score should be 1.0
-- If student selects only one of the correct answers, the score should be 0.5
-- If student selects any of the wrong answers, a value of 0.5 should be removed from the total score
-- If total score if 1.0, show the message “Well done!!!” 
-- If total score is between 0 and 1.0 (not including 0 and 1.0, i.e. 0 < score < 1.0), show the message “Better luck next time!!!”
-- If total score is less than or equal to 0, show the message “You need to work harder!!!”
+
+* If student selects both the correct answers, the score should be 1.0
+* If student selects only one of the correct answers, the score should be 0.5
+* If student selects any of the wrong answers, a value of 0.5 should be removed from the total score
+* If total score if 1.0, show the message “Well done!!!” 
+* If total score is between 0 and 1.0 \(not including 0 and 1.0, i.e. 0 &lt; score &lt; 1.0\), show the message “Better luck next time!!!”
+* If total score is less than or equal to 0, show the message “You need to work harder!!!”
 
 **Body**
 
-```
+```text
 <!-- Question Title -->
 <div class=”title”>Composition of water</div>
 
@@ -39,7 +41,7 @@ This question is a multiple choice question where the correct answer has two val
 
 **Response Declaration**
 
-```
+```text
 {
     “responseDeclaration”: {
             “RESPONSE”: {
@@ -61,7 +63,7 @@ This question is a multiple choice question where the correct answer has two val
 
 **Outcome Declaration**
 
-```
+```text
 {
     “outcomeDeclaration”: {
             “SCORE”: {
@@ -80,7 +82,7 @@ This question is a multiple choice question where the correct answer has two val
 
 **Response Processing**
 
-```
+```text
 {
     “responseProcessing”: {
           “template”: “MAP_RESPONSE”,
@@ -104,7 +106,7 @@ This question is a multiple choice question where the correct answer has two val
 
 **Feedback**
 
-```
+```text
 {
     “feedback”: {
            “feedback_01”: “<h1>Well done!!!</h1>”,
@@ -113,3 +115,4 @@ This question is a multiple choice question where the correct answer has two val
     }
 }
 ```
+
