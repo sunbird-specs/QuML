@@ -8,7 +8,7 @@ Usage is captured in form of events. ‘Events’ are broad, human-readable acti
 
 QuML implementations should capture all user interactions \(explicit and implicit\), generate telemetry events and send them to the QuML repository. Analysis of telemetry offers insights into behaviour and usage patterns, and thereby drive decisions, recommendations, and outcomes.
 
-![Telemtry conceptual diagram](/v1/images/Telemetry_concept.png)
+![Telemtry conceptual diagram](../.gitbook/assets/Telemetry_concept.png)
 
 ```text
 Figure: Telemetry generation and processing
@@ -18,7 +18,7 @@ QuML recommends usage of Sunbird platform’s [telemetry specification](http://d
 
 For example, during a question session, the student goes through a series of steps. Each step produces one or more telemetry events. The journey starts with the student attempting a question. Student provides a response to the question, response is evaluated and student sees the result. Other alternate paths during the flow include when the student's response is incorrect and student sees the solution. Similarly the student may abandon the journey at any point \(end the question session\). Telemetry generated during this journey and the metrics computed using those events are indicated in figure below.
 
-![Telemtry sample flow of events](/v1/images/Telemetry_sample_flow.png)
+![Telemtry sample flow of events](../.gitbook/assets/Telemetry_sample_flow.png)
 
 ```text
 Figure: Sample telemetry events and metrics in a question attempt

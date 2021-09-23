@@ -6,7 +6,7 @@ A potential possibility with QuML is **connected question banks**. Imagine a use
 
 With QuML, all questions have the same metadata categories \(e.g. difficulty level, topics, subject, medium, etc\) and data structure. If values of all metadata categories and data structure are the same for two questions, then an equivalence relation can be established between them. And if only medium and text data is different for two questions, both the questions can be connected as translations of each other.
 
-![Connected question banks](/v1/images/Appendix_connected_question_banks.png)
+![Connected question banks](../.gitbook/assets/Appendix_connected_question_banks.png)
 
 ```text
 Figure - Connected question banks
