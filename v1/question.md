@@ -33,7 +33,7 @@ There are multiple components in a QuML question. These components can be broadl
 
 ### ➢ Metadata​: This category comprises of the data that is needed to search, discover and compose questions into tests.
 
-![Anatomy of a QuML question](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_anatomy_quml.png)
+![Anatomy of a QuML question](/v1/images/Question_anatomy_quml.png)
 
 ```text
 Figure: Anatomy of a QuML Question
@@ -45,7 +45,7 @@ Since a QuML question is not monolithic in nature and has a well-defined structu
 
 The below figure shows an overview of different components and actors involved in the questions creation and delivery.
 
-![System view](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_system_view.png)
+![System view](/v1/images/Question_system_view.png)
 
 ```text
 Figure: Overall system view for Questions
@@ -55,7 +55,7 @@ Question Bank is a repository of QuML questions. Authoring tools are used by aut
 
 A question session is the accumulation of all the attempts at a particular instance of a question made by a student. In some types of tests, the same question may be presented to the candidate multiple times e.g. during ‘drill and practice’. Each occurrence or instance of the question is associated with its own question session. The following figure illustrates the user-perceived states of the question session.
 
-![Question session workflow](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_session_workflow.png)
+![Question session workflow](/v1/images/Question_session_workflow.png)
 
 ```text
 Figure: The life cycle of a question session
@@ -65,7 +65,7 @@ Not all states will apply to every scenario, for example feedback may not be pro
 
 As mentioned earlier, a QuML question comprises of multiple components with a well-defined structure. Each component of the question comes into play at different states of a question session. QuML implementations \(players\) use these components and perform the required action in-between state transitions. The below figure shows the actions performed by QuML players in between states of a question session.
 
-![Question session processes](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_session_components.png)
+![Question session processes](/v1/images/Question_session_components.png)
 
 ```text
 Figure: Processes in a question session
@@ -79,7 +79,7 @@ A QuML Question comprises of the information model and associated binding that c
 
 QuML specification makes use of web standards like HTML, CSS, JSON, and Javascript to store the question data. The below figure shows the parts that comprise a QuML question:
 
-![Structure of a Question](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_structural_model.png)
+![Structure of a Question](/v1/images/Question_structural_model.png)
 
 ```text
 Figure: QuML Question Structural Model
@@ -400,7 +400,7 @@ _AreaMappingDef:_
 
 A **“assetDeclaration”** contains information about the assets used in the question. Asset Declaration should have declaration for every asset used in the question across body, feedback, instructions, hints and answers.
 
-Asset declaration is a JSON object in key-value format. The keys in the JSON are the asset variables defined in the question and values are of type [_Asset_](https://github.com/sunbird-specs/inQuiry/blob/master/v1/common.md#asset).
+Asset declaration is a JSON object in key-value format. The keys in the JSON are the asset variables defined in the question and values are of type [_Asset_](/v1/common.md#asset).
 
 AssetDeclaration:
 
@@ -449,7 +449,7 @@ Response processing is the process by which QuML players assign outcomes based o
 
 The end of an attempt, and therefore response processing, must only take place in direct response to a user action or in response to some expected event, such as the end of a test. A question session that enters the suspended state may have values for the response variables that have yet to be submitted for response processing.
 
-![Question response processing](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_response_processing.png)
+![Question response processing](/v1/images/Question_response_processing.png)
 
 ```text
 Figure - The state diagram for response processing
@@ -700,7 +700,7 @@ A question can have template variable that are not used in the question “body�
 
 Template processing consists of one or more templateRules that are followed by the QuML players in order to assign values to the template variables. Template processing is identical in form to responseProcessing except that the purpose is to assign values to template variables, not outcome variables, at the start of a question session.
 
-![Question template processing](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_template_processing.png)
+![Question template processing](/v1/images/Question_template_processing.png)
 
 ```text
 Figure - The state diagram for template processing
