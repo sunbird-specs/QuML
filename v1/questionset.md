@@ -12,7 +12,7 @@ In addition to explicitly adding questions to a test, the test can also be creat
 
 A test therefore is a group of such question sets and questions with an associated set of rules that determine which of the questions the student sees, in what order, and in what way the student interacts with them. The rules describe the valid paths through the test, when responses are submitted for response processing and when \(if at all\) feedback is to be given.
 
-![Sample test](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/QuestionSet_sample_test.png)
+![Sample test](/v1/images/QuestionSet_sample_test.png)
 
 ```text
 Figure - Test/Question Set and Questions
@@ -32,7 +32,7 @@ A test \(represented using question set in QuML\) must contain at least one othe
 
 The below figure shows an overview of different components and actors involved in tests creation and delivery.
 
-![Question Set systems view](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/QuestionSet_system_view.png)
+![Question Set systems view](/v1/images/QuestionSet_system_view.png)
 
 ```text
 Figure: Overall system view for Tests
@@ -42,7 +42,7 @@ Similar to questions, teachers and students interact with question sets via QuML
 
 For each test session, question sets are selected and arranged into order according to rules defined in the containing question set. This process of selection and ordering defines a basic structure for each part of the test on a per-session basis. The paths that a student may take through this structure are then controlled by the mode settings for the question set and possibly by further preConditions or branchRules evaluated during the test session itself.
 
-![Question set structure](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Set_Structure_1.png)
+![Question set structure](/v1/images/Question_Set_Structure_1.png)
 
 ```text
 Figure - Structure of the test with question sets and questions
@@ -50,7 +50,7 @@ Figure - Structure of the test with question sets and questions
 
 The below figure illustrates a specific instance of the same question set after the application of selection and ordering rules. A rule in question set S 01 selects just one of S 01 A and S 01 B, a rule in S 02 shuffles the order of the items contained by it and, finally, rules in S 03 select 1 out of the 2 items it contains and shuffles the result.
 
-![Question set materialised](https://github.com/sunbird-specs/qml/blob/master/v1/images/Question_Set_Structure_2.png)
+![Question set materialised](/v1/images/Question_Set_Structure_2.png)
 
 ```text
 Figure - Delivered test after selection and ordering
