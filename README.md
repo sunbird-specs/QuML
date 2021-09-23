@@ -16,7 +16,7 @@ For both groups, teachers and students, frequent testing is preferable. Infreque
 
 Questions from a question bank can be used to create different types of formative assessments. Presenting questions from a question bank has many advantages. Firstly, it can ensure that questions are always fresh, do not become stale and repetitive and the questions can evolve in their precision of measuring the student’s proficiency.
 
-![Summative &amp; Formative Assessments](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Summative_Formative_Assessments.png)
+![Summative &amp; Formative Assessments](/v1/images/Overview_Summative_Formative_Assessments.png)
 
 ```text
 Figure: Summative and Formative Assessments
@@ -30,7 +30,7 @@ If the questions focus on micro-concept level assessment of student’s proficie
 
 Questions that are tagged with appropriate pedagogic metadata and associated with relevant concepts will enable “questioning” to be used as an effective means to encourage learning.
 
-![Questions as a means to learn](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Means_to_learn.png)
+![Questions as a means to learn](/v1/images/Overview_Means_to_learn.png)
 
 ```text
 Figure: Questions in a question bank with proper tagging and associations will enable multiple use-cases
@@ -49,7 +49,7 @@ Creating high-quality e-assessments, however, is challenging, especially if they
 
 Ensuring the reusability, longevity, and platform independence of tests can mitigate the high costs of creation and can help preserve investments and intellectual assets when hardware and software change, thus ensuring sustainability. This requires a standard, platform-neutral, vendor-independent interchange file format for e-assessments.
 
-![Common standard for questions](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Common_standard.png)
+![Common standard for questions](/v1/images/Overview_Common_standard.png)
 
 ```text
 Figure: A common standard will enable distributed assessments authoring and delivery
@@ -117,7 +117,7 @@ This specification enables aggregating questions from a ​wide ​variety of ex
 
 In a nutshell, a microservices architecture centered around “questions”, with different platforms & applications as constituent services, is possible. It allows anyone to offer a scalable, entirely new application that uses QuML questions, effortlessly.
 
-![Services centered around questions](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Overview_Microservices_questions.png)
+![Services centered around questions](/v1/images/Overview_Microservices_questions.png)
 
 ```text
 Figure: Services centered around ​“QuML Questions”
