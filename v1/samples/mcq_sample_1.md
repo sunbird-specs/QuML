@@ -2,7 +2,7 @@
 
 This sample demonstrates how QuML is used to model a simple multiple choice question \(with multiple answers\), configure the interactions & process the responses to produce results.
 
-![sample mcq image](https://github.com/sunbird-specs/qml/blob/master/v1/images/sample_question_mcq_1.png)
+![sample mcq image](/v1/images/sample_question_mcq_1.png)
 
 This question is a multiple choice question where the correct answer has two values - “Hydrogen” and “Oxygen”. Below is the logic for evaluating and processing the question:
 
