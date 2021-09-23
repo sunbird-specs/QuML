@@ -13,7 +13,7 @@ This document has the following sections:
 
 Traditionally, questions are monolithic in nature and are used like black boxes. Such questions are primarily used for only one purpose - getting a score when a user interacts with the question. There is no \(or very little\) knowledge of what the question consists of, what is the purpose and for whom it is intended for. This limits the re-use of questions in different scenarios and also by different systems.
 
-![Questions used as black box](https://github.com/sunbird-specs/inQuiry/blob/master/v1/images/Question_black_box.png)
+![Questions used as black box](/v1/images/Question_black_box.png)
 
 ```text
 Figure: Questions used only for SCORE output (black box model)
