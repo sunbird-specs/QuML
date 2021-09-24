@@ -6,7 +6,7 @@
 
 ---
 
-* [Power of Sunbird QuML \(Youtube\)](https://www.youtube.com/watch?v=xgvZUfYrxmQ)
+* [Power of Sunbird QuML \(YouTube\)](https://www.youtube.com/watch?v=xgvZUfYrxmQ)
 
 ## USE
 
