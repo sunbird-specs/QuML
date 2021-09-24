@@ -2,13 +2,13 @@
 
 * [Overview](README.md)
 
-## LEARN: High Level
+## LEARN
 
 ---
 
 * [Power of Sunbird QuML \(Youtube\)](https://www.youtube.com/watch?v=xgvZUfYrxmQ)
 
-## LEARN: Details
+## USE
 
 ---
 
