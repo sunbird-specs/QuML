@@ -13,3 +13,17 @@
   * [README](v1/images.md)
   * [QuML for Tests](v1/questionset.md)
 
+## LEARN: Possibilities of QuML
+
+---
+
+* [Power of Sunbird QuML \(Youtube\)](https://www.youtube.com/watch?v=xgvZUfYrxmQ)
+
+## ENGAGE: With Community
+
+---
+
+* [Source Code](https://github.com/sunbird-specs/QuML)
+* [Discuss](https://github.com/sunbird-specs/QuML/discussions)
+* [Report](https://github.com/sunbird-specs/QuML/issues)
+
