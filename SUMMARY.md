@@ -6,6 +6,7 @@
 
 ---
 
+* [Overview of Diverse Use-cases](https://www.youtube.com/watch?v=8B01FlIMGWk)
 * [Power of Sunbird QuML \(YouTube\)](https://www.youtube.com/watch?v=xgvZUfYrxmQ)
 
 ## USE
