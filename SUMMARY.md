@@ -1,6 +1,17 @@
 # Table of contents
 
 * [Overview](README.md)
+
+## LEARN: High Level
+
+---
+
+* [Power of Sunbird QuML \(Youtube\)](https://www.youtube.com/watch?v=xgvZUfYrxmQ)
+
+## LEARN: Details
+
+---
+
 * [Question Markup Language \(QuML\) Specification - Draft](qumlspec.md)
 * [v1](v1/README.md)
   * [Telemetry](v1/telemetry.md)
@@ -13,13 +24,7 @@
   * [README](v1/images.md)
   * [QuML for Tests](v1/questionset.md)
 
-## LEARN: Possibilities of QuML
-
----
-
-* [Power of Sunbird QuML \(Youtube\)](https://www.youtube.com/watch?v=xgvZUfYrxmQ)
-
-## ENGAGE: With Community
+## ENGAGE
 
 ---
 
