@@ -3,7 +3,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "QuestionSet",
     "type": "object",
-    "required": ["body"],
+    "required": [],
     "properties": {
         "instructions": {
             "description": "Instructions on how to understand, attempt or how the question set will be evaluated.",
@@ -16,52 +16,29 @@
             ]
         },
         "feedback": {
-            "description": "Feedback shown to the students after outcome processing.",
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": [ "id", "body" ],
-                "properties": {
-                    "id": {
-                        "description": "Identifier of the feedback object.",
-                        "type": "string"
+            "description": "Feedback shown to the students after response processing.",
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string"
                     },
-                    "body": {
-                        "description": "Body of the feedback to be rendered for the specified feedback identifier.",
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "description": "Feedback as HTML string when the question set is used in only one language."
-                            },
-                            { "$ref": "#/definitions/i18nData" }
-                        ]
-                    }
-                }
+                    { "$ref": "#/definitions/i18nData" }
+                ]
             }
         },
         "hints": {
-            "description": "Hints are shown to the students after outcome processing or when the student requests for hints.",
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": [ "id", "body" ],
-                "properties": {
-                    "id": {
-                        "description": "Identifier of the hint object.",
-                        "type": "string"
+            "description": "Hints are shown to the students after response processing or when the student requests for hints.",
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string"
                     },
-                    "body": {
-                        "description": "Body of the hint to be rendered for the specified hint identifier.",
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "description": "Hint as HTML string when the question set is used in only one language."
-                            },
-                            { "$ref": "#/definitions/i18nData" }
-                        ]
-                    }
-                }
-            }
+                    { "$ref": "#/definitions/i18nData" }
+                ]
+            } 
+    
         },
         "navigationMode": {
             "type": "string",
@@ -173,8 +150,8 @@
             "description": "Visibility of the question set."
         },
         "qumlVersion": {
-            "type": "string",
-            "const": "0.5",
+            "type": "number",
+            "const": 1.1,
             "description": "Version of the QuML specification using which the question set is created."
         }
     },
@@ -212,7 +189,7 @@
                 "shape": {"enum": ["point", "circle", "ellipse", "poly", "rect"]},
                 "coordinates": {
                     "type": "array",
-                    "items": { "$ref": "#/definitions/coordinateDef" }
+                    "items": { "$ref": "#/definitions/coordinate" }
                 }
             },
             "additionalProperties": false

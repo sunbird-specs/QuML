@@ -3,7 +3,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Question",
     "type": "object",
-    "required": ["body"],
+    "required": ["body","answer"],
     "properties": {
         "body": {
             "description": "Body contains the text, graphics, media objects and interactions that describe the question’s content.",
@@ -13,6 +13,18 @@
                     "description": "Question body as HTML string when the question is used in only one language."
                 },
                 { "$ref": "#/definitions/i18nData" }
+            ]
+        },
+        "answer": {
+            "description": "answer contains the text, graphics, media objects that describe the question’s content.",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Answer as HTML string when the answer is used in only one language."
+              },
+              {
+                "$ref": "#/definitions/i18nData"
+              }
             ]
         },
         "instructions": {
@@ -27,70 +39,40 @@
         },
         "feedback": {
             "description": "Feedback shown to the students after response processing.",
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": [ "id", "body" ],
-                "properties": {
-                    "id": {
-                        "description": "Identifier of the feedback object.",
-                        "type": "string"
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string"
                     },
-                    "body": {
-                        "description": "Body of the feedback to be rendered for the specified feedback identifier.",
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "description": "Feedback as HTML string when the question is used in only one language."
-                            },
-                            { "$ref": "#/definitions/i18nData" }
-                        ]
-                    }
-                }
+                    { "$ref": "#/definitions/i18nData" }
+                ]
             }
         },
         "hints": {
             "description": "Hints are shown to the students after response processing or when the student requests for hints.",
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": [ "id", "body" ],
-                "properties": {
-                    "id": {
-                        "description": "Identifier of the hint object.",
-                        "type": "string"
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string"
                     },
-                    "body": {
-                        "description": "Body of the hint to be rendered for the specified hint identifier.",
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "description": "Hint as HTML string when the question is used in only one language."
-                            },
-                            { "$ref": "#/definitions/i18nData" }
-                        ]
-                    }
-                }
-            }
+                    { "$ref": "#/definitions/i18nData" }
+                ]
+            } 
+    
         },
         "solutions": {
             "description": "Solutions to the question.",
-            "oneOf": [
-                {
-                    "type": "array",
-                    "items": {
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
                         "type": "string"
                     },
-                    "description": "List of solutions without association to any specific language",
-                    "minItems": 1
-                },
-                {
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/i18nData" },
-                    "description": "Solutions in different languages for multi-lingual questions.",
-                    "minItems": 1
-                }
-            ]
+                    { "$ref": "#/definitions/i18nData" }
+                ]
+            }
         },
         "media": {
             "type": "array",
@@ -166,7 +148,7 @@
                 }
             ]
         },
-        "bloomsLevel": {
+        "complexityLevel": {
             "type": "array",
             "enum": [""],
             "description": "Cognitive processes involved to answer the question."
@@ -217,8 +199,8 @@
             "description": "One of the values: responseProcessing (if question has inbuild response processing), offline (if scoring will be done offline and/or manually) or external (if an external system does the evaluation and submit the score)."
         },
         "qumlVersion": {
-            "type": "string",
-            "const": "0.5",
+            "type": "number",
+            "const": 1.1,
             "description": "Version of the QuML specification using which the question is created."
         },
         "totalTimeSpent": {
@@ -278,23 +260,23 @@
                 "shape": {"enum": ["point", "circle", "ellipse", "poly", "rect"]},
                 "coordinates": {
                     "type": "array",
-                    "items": { "$ref": "#/definitions/coordinateDef" }
+                    "items": { "$ref": "#/definitions/coordinate" }
                 }
             },
             "additionalProperties": false
         },
         "media": {
             "type": "object",
-            "required": ["id", "mediaType", "src"],
+            "required": ["id", "type", "src"],
             "properties": {
                 "id": {
                     "type": "string"
                 },
                 "mimeType": {
-                    "enum": ["image/png", "audio/mp3", "video/mp4", "video/webm"]
+                    "type": "string"
                 },
-                "mediaType": {
-                    "enum": ["image", "audio", "video"]
+                "type": {
+                    "enum": ["application", "audio", "font", "example", "image", "message", "model", "multipart", "text", "video"]
                 },
                 "src": {
                     "type": "string"
@@ -303,7 +285,7 @@
                     "type": "string"
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "anyTypeDef": {
             "oneOf": [
@@ -326,7 +308,10 @@
                 "cardinality": {"$ref": "#/definitions/cardinality"},
                 "type": {"$ref": "#/definitions/type"},
                 "correctResponse": {"$ref": "#/definitions/correctResponseDef"},
-                "mapping": {"$ref": "#/definitions/mappingDef"},
+                "mapping": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/mappingDef"}
+                },
                 "areaMapping": {"$ref": "#/definitions/areaMappingDef"}
             },
             "additionalProperties": false
@@ -343,10 +328,10 @@
         },
         "mappingDef": {
             "type": "object",
-            "required": ["key", "value"],
+            "required": ["value", "score"],
             "properties": {
-                "key": {"$ref": "#/definitions/anyTypeDef"},
-                "value": {"type": "number"},
+                "value": {"$ref": "#/definitions/anyTypeDef"},
+                "score": {"type": "number"},
                 "caseSensitive": {"type": "boolean", "default": false}
             },
             "additionalProperties": false
