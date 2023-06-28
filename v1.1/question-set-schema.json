@@ -1,0 +1,370 @@
+{
+    "$id": "https://github.com/sunbird-specs/inQuiry/blob/master/v1/question-set-schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "QuestionSet",
+    "type": "object",
+    "required": [],
+    "properties": {
+        "instructions": {
+            "description": "Instructions on how to understand, attempt or how the question set will be evaluated.",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "Instructions as HTML string when the question set is used in only one language."
+                },
+                { "$ref": "#/definitions/i18nData" }
+            ]
+        },
+        "feedback": {
+            "description": "Feedback shown to the students after outcome processing.",
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string"
+                    },
+                    { "$ref": "#/definitions/i18nData" }
+                ]
+            }
+        },
+        "hints": {
+            "description": "Hints are shown to the students after outcome processing or when the student requests for hints.",
+            "type": "object",
+            "additionalProperties": {
+                "oneOf": [
+                    {
+                        "type": "string"
+                    },
+                    { "$ref": "#/definitions/i18nData" }
+                ]
+            }
+        },
+        "navigationMode": {
+            "type": "string",
+            "enum": ["linear", "non-linear"],
+            "description": "Determines the general paths that the student may take during the test session. Applicable only when questions data is present."
+        },
+        "timeLimits": {
+            "type": "object",
+            "description": "Time limits for the complete set and/or for each question in the question set.",
+            "properties": {
+                "questionSet": { "$ref": "#/definitions/timeRange" },
+                "question": { "$ref": "#/definitions/timeRange" }
+            }
+        },
+        "showHints": {
+            "type": "boolean",
+            "description": "Configuration to enable/disable hints for the student while using the question set."
+        },
+        "showFeedback": {
+            "type": "boolean",
+            "description": "Configuration to enable/disable feedback for the student while using the question set."
+        },
+        "showSolutions": {
+            "type": "boolean",
+            "description": "Configuration to enable/disable solutions for the student while using the question set."
+        },
+        "questions": {
+            "type": "object",
+            "description": "Questions associated with the question set. This property is mutually exclusive with questionSets property.",
+            "required": ["shuffle", "totalQuestions", "maxQuestions", "list"],
+            "properties": {
+                "shuffle": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "totalQuestions": { "type": "integer" },
+                "maxQuestions": { "type": "integer" },
+                "list": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "List of question identifiers that are added to the question set."
+                }
+            }
+        },
+        "questionSets": {
+            "type": "array",
+            "description": "Question Sets associated with the current set.",
+            "items": { "$ref": "#/definitions/questionSetDef" }
+        },
+        "outcomeDeclaration": {
+            "description": "Information about the outcome variables of the question set, i.e the values that are output of a question set session.",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/outcomeVariableDef"
+            }
+        },
+        "outcomeProcessing": {
+            "description": "Rules to assign values to outcome variables based on the student's reponses.",
+            "type": "object",
+            "oneOf": [
+                {
+                    "required": ["eval"],
+                    "properties": {
+                        "eval": {
+                            "type": "string",
+                            "description": "Custom response processing logic using javascript."
+                        }
+                    },
+                    "$comment": "custom 'eval' data is mandatory if outcome processing templates are not used for the question set."
+                },
+                {
+                    "required": ["template"],
+                    "properties": {
+                        "template": {
+                            "enum": ["SUM_OF_SCORES", "AVG_OF_SCORES", "WEIGHTED_AVG_OF_SCORES"]
+                        },
+                        "ignoreNullValues": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "weightageConfig": {
+                            "type": "object",
+                            "additionalProperties": { "type": "number" },
+                            "description": "Weightages for questions or question sets when WEIGHTED_AVG_OF_SCORES template is used. If not provided, same weightage is given to all."
+                        },
+                        "mappingConfig": { 
+                            "type": "array",
+                            "items": {"$ref": "#/definitions/mappingConfigDef"},
+                            "description": "Configuration to set additional outcome variables (other than SCORE)."
+                        }
+                    }
+                }
+            ]
+        },
+        "questionSetType": {
+            "type": "string",
+            "enum": ["materialized", "dynamic"],
+            "description": "A question set can be comprised of a materialized list of questions, or can also be dynamically built at runtime by using a criteria to select member questions."
+        },
+        "criteria": {
+            "type": "object",
+            "additionalProperties": { "$ref": "#/definitions/anyTypeDef" },
+            "description": "Criteria to be used when the set type is dynamic."
+        },
+        "usedFor": {
+            "type": "string",
+            "enum": ["practice", "exam"]
+        },
+        "purpose": {
+            "type": "string",
+            "enum": ["recall", "explore", "sense", "assess", "teach", "revise"],
+            "description": "Purpose served by the question."
+        },
+        "visibility": {
+            "type": "string",
+            "enum": ["public", "private", "parent"],
+            "description": "Visibility of the question set."
+        },
+        "qumlVersion": {
+            "type": "number",
+            "const": 1.1,
+            "description": "Version of the QuML specification using which the question set is created."
+        }
+    },
+    "additionalProperties": true,
+    "oneOf": [
+        {  
+            "type": "object",
+            "required": [ "questions" ]
+        },
+        {  
+            "type": "object",
+            "required": [ "questionSets" ]
+        }
+    ],
+    "definitions": {
+        "cardinality": {
+            "enum": ["single", "multiple", "ordered"]
+        },
+        "type": {
+            "enum": ["string", "integer", "float", "boolean", "map", "uri", "points", "coordinate"]
+        },
+        "coordinate": {
+            "type": "object",
+            "required": ["x", "y"],
+            "properties": {
+                "x": {"type": "number"},
+                "y": {"type": "number"}
+            },
+            "additionalProperties": false
+        },
+        "points": {
+            "type": "object",
+            "required": ["shape", "coordinates"],
+            "properties": {
+                "shape": {"enum": ["point", "circle", "ellipse", "poly", "rect"]},
+                "coordinates": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/coordinate" }
+                }
+            },
+            "additionalProperties": false
+        },
+        "anyTypeDef": {
+            "oneOf": [
+                {"type": ["string", "number", "integer", "boolean", "object", "array"]},
+                {"$ref": "#/definitions/points"},
+                {"$ref": "#/definitions/media"}
+            ]
+        },
+        "i18nData": {
+            "type": "object",
+            "description": "i18n data in map format, where key is the ISO language code and value is string data in the the specified language.",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "timeRange": {
+            "type": "object",
+            "required": ["min", "max"],
+            "properties": {
+                "min": { "type": "number" },
+                "max": { "type": "number" }
+            },
+            "additionalProperties": false
+        },
+        "questionSetDef": {
+            "type": "object",
+            "required": ["questionSetId"],
+            "properties": {
+                "questionSetId": { 
+                    "type": "string",
+                    "description": "Identifier of the member question set."
+                },
+                "shuffle": { 
+                    "type": "boolean", 
+                    "default": false,
+                    "description": "If questions in the member question set should be shuffled or not when presented to the student."
+                },
+                "totalQuestions": { 
+                    "type": "integer",
+                    "description": "Total number of questions in the member question set. applicable only if the member question set has questions."
+                },
+                "maxQuestions": { 
+                    "type": "integer",
+                    "description": "Number of questions in the member question set that should be used in one session. applicable only if the member question set has questions."
+                },
+                "preConditions": {
+                    "type": "array",
+                    "description": "Conditions to be validated before rendering the question set. generally depends on the outcomes of question sets presented earlier in the session.",
+                    "items": { "$ref": "#/definitions/preConditionDef" }
+                },
+                "branchRules": {
+                    "type": "array",
+                    "description": "Evaluated after question set is complete and jumps forward to the specified target.",
+                    "items": { "$ref": "#/definitions/branchRuleDef" }
+                }
+            },
+            "additionalProperties": false
+        },
+        "preConditionDef": {
+            "type": "object",
+            "required": ["questionSetId", "match"],
+            "properties": {
+                "questionSetId": {
+                    "type": "string",
+                    "description": "Identifier of the question set whose outcome will be used to do the precondition check."
+                },
+                "match": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/outcomeMatchDef" }
+                }
+            },
+            "additionalProperties": false
+        },
+        "outcomeMatchDef": {
+            "type": "object",
+            "required": ["outcomeVariable", "operator", "value"],
+            "properties": {
+                "outcomeVariable": { "type": "string" },
+                "operator": {
+                    "type": "string",
+                    "enum": ["lt", "le", "eq", "ge", "gt", "in"]
+                },
+                "value": {
+                    "type": ["string", "number", "integer", "boolean", "array", "object"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "branchRuleDef": {
+            "type": "object",
+            "required": ["match", "target"],
+            "properties": {
+                "match": {
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/outcomeMatchDef" }
+                },
+                "target": {
+                    "type": "object",
+                    "oneOf": [
+                        {
+                            "required": ["questionSetId"],
+                            "properties": {
+                                "questionSetId": {"type": "string"}
+                            }
+                        },
+                        {
+                            "required": ["exit"],
+                            "properties": {
+                                "exit": {"type": "boolean", "const": true}
+                            }
+                        }
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "outcomeVariableDef": {
+            "type": "object",
+            "required": ["cardinality", "type"],
+            "properties": {
+                "cardinality": {"$ref": "#/definitions/cardinality"},
+                "type": {"$ref": "#/definitions/type"},
+                "defaultValue": {"$ref": "#/definitions/anyTypeDef"},
+                "range": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/anyTypeDef"}
+                }
+            },
+            "additionalProperties": false
+        },
+        "mappingConfigDef": {
+            "type": "object",
+            "properties": {
+                "SCORE": {
+                    "type": "object",
+                    "oneOf": [
+                        {
+                            "patternProperties": {
+                                "^[g,l]e$": { "type": "number"},
+                                "^[g,l]t$": { "type": "number"},
+                                "^eq$": { "type": "number"},
+                                "^in$": { "type": "array", "items": {"type": "number"}}
+                            },
+                            "$comment": "Define the SCORE range using the operators: le (less than or equal to), lt (less than), eq (equals to), ge (greater than or equals to), gt (greater than) and in (in a list of values). e.g.: {“lt”: 1.0}."
+                        },
+                        {
+                            "required": ["regex"],
+                            "properties": {
+                                "regex": { "type": "string", "format": "regex" }
+                            },
+                            "$comment": "Alternatively, a regex expression can also be used to define the SCORE range."
+                        }
+                    ],
+                    "additionalProperties": false
+                },
+                "outcomeVariables": {
+                    "type": "object",
+                    "description": "List of outcome variables, defined in outcomeDeclaration, and the values to be set for them when the computed SCORE falls in the defined range.",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/anyTypeDef"
+                    }
+                }
+            },
+            "additionalProperties": false
+        }
+    }
+  }
+  
